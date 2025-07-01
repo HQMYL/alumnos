@@ -369,7 +369,7 @@ $pagConfig = array(
 $pagination =  new Pagination($pagConfig);
 
 // Fetch records based on the limit
-$query = $db->query("SELECT * FROM cursos a LEFT JOIN users b ON a.profesor_asignado= b.id_usuario ORDER BY a.id_curso ASC LIMIT $limit");
+$query = $db->query("SELECT a.*,b.* FROM cursos a LEFT JOIN users b ON a.profesor_asignado= b.id_usuario ORDER BY a.id_curso ASC LIMIT $limit");
 
 
 if($query->num_rows > 0){?>
@@ -641,12 +641,12 @@ foreach ($sth as $row )
 function searchFilter(page_num) {
     page_num = page_num?page_num:0;
     var keywords = $('#keywords').val();
-    var rol = $('#cmbrol').val();
+    var asignado = $('#cmbusuario').val();
     
     $.ajax({
         type: 'POST',
-        url: 'GetUsuarios.php',
-        data:'page='+page_num+'&keywords='+keywords+'&rol='+rol,
+        url: 'GetCursos.php',
+        data:'page='+page_num+'&keywords='+keywords+'&asignado='+asignado,
         beforeSend: function () {
             $('.loading-overlay').show();
         },

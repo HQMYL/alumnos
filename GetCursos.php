@@ -38,12 +38,12 @@ if (isset($_SESSION["usuario"]))
     $whereSQL = 'WHERE TRUE';
     if(!empty($_POST['keywords']))
     {
-        $whereSQL = $whereSQL." AND (nombre_curso LIKE '%".$_POST['keywords']."%' || descripcion_curso LIKE '%".$_POST['keywords']."%' || duracion LIKE '%".$_POST['keywords']."%' || profesor_asignado LIKE '%".$_POST['keywords']."%')  ";
+        $whereSQL = $whereSQL." AND (nombre_curso LIKE '%".$_POST['keywords']."%' || descripcion_curso LIKE '%".$_POST['keywords']."%' || duracion LIKE '%".$_POST['keywords']."%')  ";
     }
 
-    if(!empty($_POST['Profesor_asignado']))
+    if(!empty($_POST['asignado']))
     {
-        $whereSQL = $whereSQL." AND profesor_asignado LIKE '%".$_POST['profesor_asignado']."%' ";
+        $whereSQL = $whereSQL." AND profesor_asignado LIKE '%".$_POST['asignado']."%' ";
     }
 
     $query   = $db->query("SELECT COUNT(*) as rowNum FROM cursos ".$whereSQL);
@@ -62,7 +62,7 @@ if (isset($_SESSION["usuario"]))
     $pagination =  new Pagination($pagConfig);
 
     // Fetch records based on the offset and limit
-    $query = $db->query("SELECT a.*,b.* FROM users a LEFT JOIN roles b ON a.id_tipo = b.id_rol  $whereSQL ORDER BY id_usuario DESC LIMIT $offset,$limit");
+    $query = $db->query("SELECT a.*,b.* FROM cursos a LEFT JOIN users b ON a.profesor_asignado= b.id_usuario  $whereSQL ORDER BY a.id_curso DESC LIMIT $offset,$limit");
 ?>
     <!-- Data list container -->
     
