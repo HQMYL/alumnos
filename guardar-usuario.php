@@ -84,6 +84,11 @@ if(isset($_POST['cmbestado']))
     $estado = $_POST['cmbestado'];
 }
 
+if (empty($_POST['cmbestado'])) 
+{
+ $estado = "1";
+}
+
 
 $sth = $con->prepare("SELECT * FROM users WHERE usuario=?");
 $sth->bindParam(1, $user);
@@ -155,7 +160,7 @@ else {
     // if no error occured, continue ....
     if(!isset($errMSG))
     {
-      $stmt = $DB_con->prepare('INSERT INTO users(codigo,nombre,apellidos,direccion,correo,telefono,movil,usuario,pass,rol,estado,img) VALUES(:codigo,:nombre,:apellidos,:dir,:correo,:tel,:movil,:user,:pass,:rol,:estado,:userpic)');
+      $stmt = $DB_con->prepare('INSERT INTO users(codigo,nombre,apellidos,direccion,correo,telefono,movil,usuario,pass,id_tipo,id_estado_usuario,img) VALUES(:codigo,:nombre,:apellidos,:dir,:correo,:tel,:movil,:user,:pass,:rol,:estado,:userpic)');
       $stmt->bindParam(':codigo',$codigo);
       $stmt->bindParam(':nombre',$nombre);
       $stmt->bindParam(':apellidos',$apellidos);

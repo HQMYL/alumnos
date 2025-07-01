@@ -109,31 +109,6 @@ foreach ($sth as $row )
 
 <div class="col-md-4">
 
-<label for="cat">Estado:</label>
-<select class="form-control form-control-sm" name="cmbestado">
-<option value="">Seleccione...</option>
-<?php 
-$sth = $con->prepare("SELECT * FROM estados ");
-#$sth->bindParam(1, $usuario);
-$sth->execute();
-
-if ($sth->rowCount() > 0) {
-
-foreach ($sth as $row ) 
-{ ?>
-
-<option value="<?= $row["id"]; ?>"><?= $row["estado"]; ?></option>
-
-<?php }
-
-}
-?>
-</select>
-
-</div>
-
-<div class="col-md-4">
-
 <label for="cat">Foto de perfil:</label>
 
 <input class="form-control form-control-sm" type="file" name="archivo">
