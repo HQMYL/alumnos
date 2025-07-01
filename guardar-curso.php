@@ -9,7 +9,7 @@ $fallo = "Huboun error inténtalo nuevamente";
   $fallo2 = "El tamaño de la foto debe ser máximo de 5MG";
   $fallo3 = "Solo se permiten imágenes JPG,JPEG,PNG,JFIF";
   
- $exito = "el usuario ha sido registrado exitosamente";
+ $exito = "El curso ha sido registrado exitosamente";
  
 $response = "";
 $response = array(
@@ -43,62 +43,8 @@ if(isset($_POST['duracion']))
 $profesor_asignado = "";
 if(isset($_POST['cmbusuario'])) 
 {
-    $correo = $_POST["cmbusuario"];
+    $profesor_asignado = $_POST["cmbusuario"];
 }
-
-$tel = "";
-if(isset($_POST['tel'])) 
-{
-    $tel = $_POST["tel"];
-}
-
-$movil = "";
-if(isset($_POST['movil'])) 
-{
-    $movil = $_POST["movil"];
-}
-
-$user = "";
-if(isset($_POST['user'])) 
-{
-    $user = $_POST['user'];
-}
-
-$pass = "";
-if(isset($_POST['pass'])) 
-{
-    $pass = $_POST['pass'];
-    $pass = md5($pass);
-}
-
-
-$rol = "";
-if(isset($_POST['cmbrol'])) 
-{
-    $rol = $_POST['cmbrol'];
-}
-
-$estado = "";
-if(isset($_POST['cmbestado'])) 
-{
-    $estado = $_POST['cmbestado'];
-}
-
-
-$sth = $con->prepare("SELECT * FROM users WHERE usuario=?");
-$sth->bindParam(1, $user);
-
-$sth->execute();
-
-if ($sth->rowCount() > 0) {
-
-    $response['status'] = 0;
-    $response['message'] = "El usuario ya existe debes escoger otro";
-    echo  json_encode($response);
-
-}
-
-else {
 
 #if(isset($_POST['btnsave']))
  # {
@@ -109,10 +55,10 @@ else {
     }*/
     #else
     #{
-    $imgFile = $_FILES['archivo']['name'];
+    /* $imgFile = $_FILES['archivo']['name'];
     $tmp_dir = $_FILES['archivo']['tmp_name'];
     $imgSize = $_FILES['archivo']['size'];
-    $carpeta = 'dist/img/users/';
+    $carpeta = 'dist/img/cursos/';
      if (!file_exists($carpeta)) 
      {
        mkdir($carpeta,0777);
@@ -151,24 +97,15 @@ else {
     if (empty($imgFile)) 
     {
       $userpic = "user-default.png";
-    }
-    // if no error occured, continue ....
-    if(!isset($errMSG))
-    {
-      $stmt = $DB_con->prepare('INSERT INTO users(codigo,nombre,apellidos,direccion,correo,telefono,movil,usuario,pass,rol,estado,img) VALUES(:codigo,:nombre,:apellidos,:dir,:correo,:tel,:movil,:user,:pass,:rol,:estado,:userpic)');
-      $stmt->bindParam(':codigo',$codigo);
+    } */
+    
+    /* if(!isset($errMSG))
+    { */
+      $stmt = $DB_con->prepare('INSERT INTO cursos(nombre_curso,descripcion_curso,duracion,profesor_asignado) VALUES(:nombre,:descripcion,:duracion,:profesor_asignado)');
       $stmt->bindParam(':nombre',$nombre);
-      $stmt->bindParam(':apellidos',$apellidos);
-      $stmt->bindParam(':dir',$dir);
-      $stmt->bindParam(':correo',$correo);
-      $stmt->bindParam(':tel',$tel);
-      $stmt->bindParam(':movil',$movil);
-      $stmt->bindParam(':user',$user);
-      $stmt->bindParam(':pass',$pass);
-      $stmt->bindParam(':rol',$rol);
-      $stmt->bindParam(':estado',$estado);
-      $stmt->bindParam(':userpic',$userpic);
-      
+      $stmt->bindParam(':descripcion',$descripcion);
+      $stmt->bindParam(':duracion',$duracion);
+      $stmt->bindParam(':profesor_asignado',$profesor_asignado);
       if($stmt->execute())
       {
         $response['status'] = 1;
@@ -187,10 +124,10 @@ else {
     $response['message'] = $fallo;
     echo  json_encode($response);
       }
-    }
+    /* } */
   #}
 
-}
+
 
 
 
