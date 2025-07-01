@@ -377,7 +377,6 @@ if($query->num_rows > 0){?>
 <table class="table table-hover table-bordered">
 <thead>
 <tr>
-
 <th>Curso</th>
 <th>Descripción</th>
 <th>Duración</th>
@@ -396,7 +395,6 @@ while($row = $query->fetch_assoc()){
 <td><?= $row["nombre_curso"]; ?></td>
 <td><?= $row["descripcion_curso"]; ?></td>
 <td><?= $row["duracion"]; ?></td>
-
 <td><?= $row["nombre"]; ?> <?= $row["apellidos"]; ?></td>
 
 <td><button type="button" class="btn btn-info actualizar" data-id="<?= $row['id_curso'];?>" data-nombre="<?= $row['nombre_curso'];?>" data-descripcion="<?= $row['descripcion_curso'];?>" data-duracion="<?= $row['duracion'];?>" data-asignado="<?= $row['profesor_asignado'];?>">Editar</button></td>

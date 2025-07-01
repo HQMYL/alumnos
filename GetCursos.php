@@ -73,10 +73,10 @@ if (isset($_SESSION["usuario"]))
           <table class="table table-hover table-bordered">
     <thead>
 <tr>
-<th>Nombre</th>
-<th>Correo</th>
-<th>Móvil</th>
-<th>Tipo</th>
+<th>Curso</th>
+<th>Descripción</th>
+<th>Duración</th>
+<th>Profesor Asignado</th>
 <th>Editar</th>
 <th>Eliminar</th>
 </tr>
@@ -87,11 +87,11 @@ if (isset($_SESSION["usuario"]))
                 $offset++
         ?>
 <tr>
+<td><?= $row["nombre_curso"]; ?></td>
+<td><?= $row["descripcion_curso"]; ?></td>
+<td><?= $row["duracion"]; ?></td>
 <td><?= $row["nombre"]; ?> <?= $row["apellidos"]; ?></td>
-<td><?= $row["correo"]; ?></td>
-<td><?= $row["movil"]; ?></td>
-<td><?= $row["rol"]; ?></td>
-<td><button type="button" class="btn btn-info actualizar" data-id="<?= $row['id_usuario'];?>" data-nombre="<?= $row['nombre'];?>" data-apellidos="<?= $row['apellidos'];?>" data-dir="<?= $row['direccion'];?>" data-correo="<?= $row['correo'];?>" data-tel="<?= $row['telefono'];?>" data-movil="<?= $row['movil'];?>" data-usuario="<?= $row['usuario'];?>" data-pass="<?= $row['pass'];?>" data-rol="<?= $row['id_tipo'];?>" data-estado="<?= $row['id_estado_usuario'];?>" data-img="<?= $row['img'];?>">Editar</button></td>
+<td><button type="button" class="btn btn-info actualizar" data-id="<?= $row['id_curso'];?>" data-nombre="<?= $row['nombre_curso'];?>" data-descripcion="<?= $row['descripcion_curso'];?>" data-duracion="<?= $row['duracion'];?>" data-asignado="<?= $row['profesor_asignado'];?>">Editar</button></td>
 <td><button type="button" class="btn btn-danger delete"  data-id="<?= $row['id_usuario'];?>">Eliminar</button></td>
 </tr>
             <?php
