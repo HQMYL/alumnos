@@ -297,7 +297,7 @@ $anno = date("Y");
              
                 <!--<div class="row"> INICIO ROW -->
 <div class="card-body"><!-- INICIO CARD BODY -->
-<button type="button" class="btn btn-info agregar_usuario"><i class="fa fa-solid fa-plus"></i> Agregar usuario</button>
+<button type="button" class="btn btn-info agregar_curso"><i class="fa fa-solid fa-plus"></i> Agregar usuario</button>
 <label for="inputEmail4"></label>
 <div class="row align-items-stretch mb-5">
 <div class="col-md-6">
@@ -348,13 +348,13 @@ foreach ($sth as $row )
 
 <!-- ESPACIO PARA TABLA ORIGINAL-->
 <?php
-// $baseURL = 'GetCursos.php';
+ $baseURL = 'GetCursos.php';
 $limit = 5;
 
 // Count of all records
 #$mar = "208";
 #$whereSQL = "WHERE users.id = establecimientos.id_usuario ";
-$query   = $db->query("SELECT  COUNT(*) as rowNum FROM users ");
+$query   = $db->query("SELECT  COUNT(*) as rowNum FROM cursos ");
 $result  = $query->fetch_assoc();
 $rowCount= $result['rowNum'];
 
@@ -369,7 +369,7 @@ $pagConfig = array(
 $pagination =  new Pagination($pagConfig);
 
 // Fetch records based on the limit
-$query = $db->query("SELECT a.*,b.* FROM users a LEFT JOIN roles b ON a.id_tipo = b.id_rol  ORDER BY a.id_usuario ASC LIMIT $limit");
+$query = $db->query("SELECT * FROM cursos a LEFT JOIN users b ON a.profesor_asignado= b.id_usuario ORDER BY a.id_curso ASC LIMIT $limit");
 
 
 if($query->num_rows > 0){?>
@@ -378,10 +378,10 @@ if($query->num_rows > 0){?>
 <thead>
 <tr>
 
-<th>Nombre</th>
-<th>Correo</th>
-<th>Móvil</th>
-<th>Tipo</th>
+<th>Curso</th>
+<th>Descripción</th>
+<th>Duración</th>
+<th>Profesor Asignado</th>
 <th>Editar</th>
 <th>Eliminar</th>
 
@@ -393,13 +393,13 @@ if($query->num_rows > 0){?>
 while($row = $query->fetch_assoc()){
 ?>
 <tr>
+<td><?= $row["nombre_curso"]; ?></td>
+<td><?= $row["descripcion_curso"]; ?></td>
+<td><?= $row["duracion"]; ?></td>
+
 <td><?= $row["nombre"]; ?> <?= $row["apellidos"]; ?></td>
-<td><?= $row["correo"]; ?></td>
-<td><?= $row["movil"]; ?></td>
 
-<td><?= $row["rol"]; ?></td>
-
-<td><button type="button" class="btn btn-info actualizar" data-id="<?= $row['id_usuario'];?>" data-nombre="<?= $row['nombre'];?>" data-apellidos="<?= $row['apellidos'];?>" data-dir="<?= $row['direccion'];?>" data-correo="<?= $row['correo'];?>" data-tel="<?= $row['telefono'];?>" data-movil="<?= $row['movil'];?>" data-usuario="<?= $row['usuario'];?>" data-pass="<?= $row['pass'];?>" data-rol="<?= $row['id_tipo'];?>" data-estado="<?= $row['id_estado_usuario'];?>" data-img="<?= $row['img'];?>">Editar</button></td>
+<td><button type="button" class="btn btn-info actualizar" data-id="<?= $row['id_curso'];?>" data-nombre="<?= $row['nombre_curso'];?>" data-descripcion="<?= $row['descripcion_curso'];?>" data-duracion="<?= $row['duracion'];?>" data-asignado="<?= $row['profesor_asignado'];?>">Editar</button></td>
 <td><button type="button" class="btn btn-danger delete"  data-id="<?= $row['id_usuario'];?>">Eliminar</button></td>
 </tr>
 <?php
@@ -457,7 +457,7 @@ echo '<tr><td colspan="6"><h2>No hay registros</h2></td></tr>';
 <!-- Modal content-->
 <div class="modal-content">
 <div class="modal-header" style="background-color: #337AFF;">
-<p class="modal-title" style="color: #fff;">Agregar usuario</p>
+<p class="modal-title" style="color: #fff;">Agregar curso</p>
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 </div>
 <div class="modal-body">
@@ -803,7 +803,7 @@ function searchFilter(page_num) {
 <script type="text/javascript">
  $(document).ready(function() { 
 
- $(".agregar_usuario").on("click",function(){
+ $(".agregar_curso").on("click",function(){
 
   $("#myModalAgregar").modal({show:true});
   
