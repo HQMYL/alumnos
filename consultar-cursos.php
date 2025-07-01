@@ -316,7 +316,7 @@ $anno = date("Y");
                   <option value="">Seleccione...</option>
                   <?php
                   $asesor = "";
-                  $asesor = "Asesor"; 
+                  $asesor = "2"; 
 $sth = $con->prepare("SELECT * FROM users WHERE id_tipo = ? ");
 $sth->bindParam(1, $asesor);
 $sth->execute();
@@ -464,65 +464,30 @@ echo '<tr><td colspan="6"><h2>No hay registros</h2></td></tr>';
 <form id="fupForm">
 <div class="row">
 <div class="col-md-4">
-<label>Nombre</label>
+<label>Curso</label>
 <input type="text" class="form-control form-control-sm" name="nombre" placeholder="Nombre">
 </div>
 
 <div class="col-md-4">
-<label>Apellidos</label>
-<input type="text" class="form-control form-control-sm" name="nombre" placeholder="Nombre">
-</div>
-
-<div class="col-md-4">
-<label>Dirección</label>
-<input type="text" class="form-control form-control-sm" name="dir" placeholder="Dirección">
-</div>
-
-<div class="col-md-4">
-<label>Correo</label>
-<input type="text" class="form-control form-control-sm" name="correo" placeholder="Correo">
-</div>
-
-<div class="col-md-4">
-<label>Teléfono</label>
-
-<input type="text" class="form-control form-control-sm" name="tel" placeholder="Teléfono">
+<label>Descripción</label>
+<textarea class="form-control form-control-sm" name="descripcion" cols="5"></textarea>
 
 </div>
 
 <div class="col-md-4">
-<label>Móvil</label>
-<input type="text" class="form-control form-control-sm" name="movil" placeholder="Móvil">
+<label>Duración</label>
+<input type="text" class="form-control form-control-sm" name="duracion" placeholder="Duración">
 </div>
 
 <div class="col-md-4">
-<label>Usuario</label>
-<input type="text" class="form-control form-control-sm" name="user" id="user" placeholder="Usuario">
-<h3 id="comprobar"></h3>
-
-</div>
-
-<div class="col-md-4">
-<label>Contraseña</label>
-<input class="form-control form-control-sm" type="password" name="pass" id="pass1">
-</div>
-
-<div class="col-md-4">
-
-<label for="cat">Confirmar contraseña:</label>
-
-<input class="form-control form-control-sm" type="password" id="pass2">
-
-<div id="respuesta" style="display: none;"><h3>Las contraseñas introducidas no son iguales</h3></div>
-</div>
-
-<div class="col-md-4">
-<label>Tipo de usuario</label>
-<select class="form-control form-control-sm" name="cmbrol">
+<label>Profesor asignado</label>
+<select class="form-control form-control-sm" name="cmbusuario">
 <option value="">Seleccione...</option>
-<?php 
-$sth = $con->prepare("SELECT * FROM roles ");
-#$sth->bindParam(1, $usuario);
+<?php
+$asesor = "";
+$asesor = "2"; 
+$sth = $con->prepare("SELECT * FROM users WHERE id_tipo = ? ");
+$sth->bindParam(1, $asesor);
 $sth->execute();
 
 if ($sth->rowCount() > 0) {
@@ -530,47 +495,13 @@ if ($sth->rowCount() > 0) {
 foreach ($sth as $row ) 
 { ?>
 
-<option value="<?= $row["id_rol"]; ?>"><?= $row["rol"]; ?></option>
+<option value="<?= $row["id_usuario"]; ?>"><?= $row["nombre"]; ?></option>
 
 <?php }
 
 }
 ?>
-</select>
-
-</div>
-
-<div class="col-md-4">
-
-<label for="cat">Estado:</label>
-<select class="form-control form-control-sm" name="cmbestado">
-<option value="">Seleccione...</option>
-<?php 
-$sth = $con->prepare("SELECT * FROM estados ");
-#$sth->bindParam(1, $usuario);
-$sth->execute();
-
-if ($sth->rowCount() > 0) {
-
-foreach ($sth as $row ) 
-{ ?>
-
-<option value="<?= $row["id"]; ?>"><?= $row["estado"]; ?></option>
-
-<?php }
-
-}
-?>
-</select>
-
-</div>
-
-<div class="col-md-4">
-
-<label for="cat">Foto de perfil:</label>
-
-<input class="form-control form-control-sm" type="file" name="archivo">
-<br>
+</select><br>
 </div>
 
 </div> <!--FINAL ROW-->
@@ -906,7 +837,7 @@ $("input").keydown(function (e){
     e.preventDefault();
     $.ajax({
       type: 'POST',
-      url: 'guardar-usuario.php',
+      url: 'guardar-curso.php',
       data: new FormData(this),
       dataType: 'json',
       contentType: false,
