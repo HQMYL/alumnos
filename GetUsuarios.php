@@ -28,7 +28,7 @@ if (isset($_SESSION["usuario"]))
     include("dbConfig.php");
   
   // Set some useful configuration
-  $baseURL = 'getUsuarios.php';
+  $baseURL = 'GetUsuarios.php';
   $offset = !empty($_POST['page'])?$_POST['page']:0;
   $limit = 5;
   
@@ -126,18 +126,24 @@ $(".actualizar").on("click",function()
   var usuario = $(this).attr("data-usuario");
   var pass = $(this).attr("data-pass");
   var rol = $(this).attr("data-rol");
-   var estado = $(this).attr("data-id_estado_usuario");
+   var estado = $(this).attr("data-estado");
    var img = $(this).attr("data-img");
-  //numeros_contacto = numeros_contacto.split(',');
-  
-  
+   
   $("#id_usuario").val(id);
   $("#nombre").val(nombre);
   $("#apellidos").val(apellidos);
+  $("#dir").val(dir);
+  $("#correo").val(correo);
+  $("#tel").val(tel);
+  $("#movil").val(movil);
+  $("#user2").val(usuario);
+  $("#pass0").val(pass);
+  $('#cmbrol option[value="'+rol+'"]').attr("selected", true);
+  $('#cmbestado option[value="'+estado+'"]').attr("selected", true);
+  $("#img").attr("src","dist/img/users/"+img);
+  $("#imagen_actual").val(img);
   
-  $('#myModal').modal('toggle');
-    $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
+
   $("#myModalActualizar").modal({show:true});
   
 });
@@ -196,103 +202,77 @@ Swal.fire({
 });
 </script>
 
-<script>
-// Load content from external file
-$(document).ready(function() {
-$(".agregar").on("click",function(){
 
-  var id = $(this).attr("data-id");
-  
-Swal.fire({
-    title: 'Desea agregar este usuario a destacados ?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#337AFF', 
-    cancelButtonColor:  '#bb414d',
-    cancelButtonText: 'Cerrar',
-    confirmButtonText: 'Agregar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.ajax({
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#user").keyup(function(){
+
+          var id = $("#user").val();
+    
+       $.ajax({
 
            type: "POST",
-           url:"agregar-usuario-destacado.php",
+           url:"comprobacion.php",
            data: {"id":id}, // Adjuntar los campos del formulario enviado.
            
-           success: function(response) {  
-             Swal.fire({
-  icon: 'success',
-  //title: 'Eliminar Propiedad',
-  text: 'Usuario agregado correctamente'
-  
-})
-             setTimeout("location.reload()", 3000);
-             
-
+           success: function(response) {
+            
+            $("#comprobar").html(response);
+            
+            
             }
 
 
          });
-    }
-  })
 
+    });
 
-
-  
-});
-
-
-
-});
+   
+});    
 </script>
-<script>
-// Load content from external file
+
+
+<script type="text/javascript">
+
 $(document).ready(function() {
-$(".quitar").on("click",function(){
-
-  var id = $(this).attr("data-id");
-  
-Swal.fire({
-    title: 'Desea eliminar este usuario de la sección destacados ?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#337AFF', 
-    cancelButtonColor:  '#bb414d',
-    cancelButtonText: 'Cerrar',
-    confirmButtonText: 'Cambiar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.ajax({
-
-           type: "POST",
-           url:"eliminar-usuario-destacado.php",
-           data: {"id":id}, // Adjuntar los campos del formulario enviado.
-           
-           success: function(response) {  
-             Swal.fire({
-  icon: 'success',
-  //title: 'Eliminar Propiedad',
-  text: 'Usuario actualizado correctamente'
-  
-})
-             setTimeout("location.reload()", 3000);
-             
-
-            }
-
-
-         });
+   
+  $("#pass2").keyup(function()
+  {
+          
+      var cla1=$("#pass1").val();
+      var cla2=$("#pass2").val();
+      
+      
+    if (cla1 != cla2) {
+      $("#respuesta").css("display","block"); 
+    
     }
-  })
-
-
-
+else {
+    $("#respuesta").css("display","none"); 
   
+}
+
+
 });
 
+$("#pass12").keyup(function(){
+          
+      var cla11=$("#pass11").val();
+      var cla12=$("#pass12").val();
+      
+      
+    if (cla11 != cla12) {
+      $("#respuesta2").css("display","block"); 
+    
+    }
+else {
+    $("#respuesta2").css("display","none"); 
+  
+}
 
 
 });
+});  
 </script>    
     <!-- Display pagination links -->
     <?= $pagination->createLinks(); ?>

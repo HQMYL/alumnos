@@ -727,7 +727,7 @@ foreach ($sth as $row )
 
 <input class="form-control form-control-sm" type="file" name="archivo">
 <img src="" name="imagen_actual" id="imagen_actual">
-<input class="form-control form-control-sm" type="text" name="id" id="id_usuario">
+<input class="form-control form-control-sm" type="hidden" name="id" id="id_usuario">
 <br>
 </div>
 
@@ -776,6 +776,7 @@ foreach ($sth as $row )
 <script src="dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard3.js"></script>
+<script src="dist/js/sweetalert2@10.js"></script>
 <script>
 // Custom function to handle search and filter operations
 function searchFilter(page_num) {
@@ -785,7 +786,7 @@ function searchFilter(page_num) {
     
     $.ajax({
         type: 'POST',
-        url: 'getUsuarios.php',
+        url: 'GetUsuarios.php',
         data:'page='+page_num+'&keywords='+keywords+'&rol='+rol,
         beforeSend: function () {
             $('.loading-overlay').show();
