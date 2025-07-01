@@ -297,7 +297,7 @@ $anno = date("Y");
              
                 <!--<div class="row"> INICIO ROW -->
 <div class="card-body"><!-- INICIO CARD BODY -->
-<button type="button" class="btn btn-info agregar_curso"><i class="fa fa-solid fa-plus"></i> Agregar usuario</button>
+<button type="button" class="btn btn-info agregar_curso"><i class="fa fa-solid fa-plus"></i> Agregar curso</button>
 <label for="inputEmail4"></label>
 <div class="row align-items-stretch mb-5">
 <div class="col-md-6">
@@ -541,73 +541,37 @@ foreach ($sth as $row )
 <!-- Modal content-->
 <div class="modal-content">
 <div class="modal-header" style="background-color: #337AFF;">
-<p class="modal-title" style="color: #fff;">Actualizar usuario</p>
+<p class="modal-title" style="color: #fff;">Actualizar curso</p>
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 </div>
 <div class="modal-body">
 <form id="fupForm2">
 <div class="row">
 <div class="col-md-4">
-<label>Nombre</label>
-<input type="text" class="form-control form-control-sm" name="nombre" id="nombre" placeholder="Nombre">
+<label>Curso</label>
+<input type="text" class="form-control form-control-sm" name="nombre" id="nombre_curso" placeholder="Nombre">
 </div>
 
 <div class="col-md-4">
-<label>Apellidos</label>
-<input type="text" class="form-control form-control-sm" name="apellidos" id="apellidos" placeholder="Apellidos">
-</div>
-
-<div class="col-md-4">
-<label>Dirección</label>
-<input type="text" class="form-control form-control-sm" name="dir" id="dir" placeholder="Dirección">
-</div>
-
-<div class="col-md-4">
-<label>Correo</label>
-<input type="text" class="form-control form-control-sm" name="correo" id="correo" placeholder="Correo">
-</div>
-
-<div class="col-md-4">
-<label>Teléfono</label>
-
-<input type="text" class="form-control form-control-sm" name="tel" id="tel" placeholder="Teléfono">
+<label>Descripción</label>
+<textarea class="form-control form-control-sm" name="descripcion" id="descripcion" cols="5"></textarea>
 
 </div>
 
 <div class="col-md-4">
-<label>Móvil</label>
-<input type="text" class="form-control form-control-sm" name="movil" id="movil" placeholder="Móvil">
+<label>Duración</label>
+<input type="text" class="form-control form-control-sm" name="duracion" id="duracion" placeholder="Duración">
 </div>
 
 <div class="col-md-4">
-<label>Usuario</label>
-<input type="text" class="form-control form-control-sm" name="user" id="user2" placeholder="Usuario">
-<h3 id="comprobar"></h3>
-
-</div>
-
-<div class="col-md-4">
-<label>Contraseña</label>
-<input class="form-control form-control-sm" type="hidden" name="pass" id="pass0">
-<input class="form-control form-control-sm" type="password" name="pass" id="pass11">
-</div>
-
-<div class="col-md-4">
-
-<label for="cat">Confirmar contraseña:</label>
-
-<input class="form-control form-control-sm" type="password" id="pass12">
-
-<div id="respuesta2" style="display: none;"><h3>Las contraseñas introducidas no son iguales</h3></div>
-</div>
-
-<div class="col-md-4">
-<label>Tipo de usuario</label>
-<select class="form-control form-control-sm" name="cmbrol" id="cmbrol">
+<label>Profesor asignado</label>
+<select class="form-control form-control-sm" name="asignado" id="asignado">
 <option value="">Seleccione...</option>
-<?php 
-$sth = $con->prepare("SELECT * FROM roles ");
-#$sth->bindParam(1, $usuario);
+<?php
+$asesor = "";
+$asesor = "2"; 
+$sth = $con->prepare("SELECT * FROM users WHERE id_tipo = ? ");
+$sth->bindParam(1, $asesor);
 $sth->execute();
 
 if ($sth->rowCount() > 0) {
@@ -615,52 +579,14 @@ if ($sth->rowCount() > 0) {
 foreach ($sth as $row ) 
 { ?>
 
-<option value="<?= $row["id_rol"]; ?>"><?= $row["rol"]; ?></option>
+<option value="<?= $row["id_usuario"]; ?>"><?= $row["nombre"]; ?></option>
 
 <?php }
 
 }
 ?>
 </select>
-
-</div>
-
-<div class="col-md-4">
-
-<label for="cat">Estado:</label>
-<select class="form-control form-control-sm" name="cmbestado" id="cmbestado">
-<option value="">Seleccione...</option>
-<?php 
-$sth = $con->prepare("SELECT * FROM estados ");
-#$sth->bindParam(1, $usuario);
-$sth->execute();
-
-if ($sth->rowCount() > 0) {
-
-foreach ($sth as $row ) 
-{ ?>
-
-<option value="<?= $row["id"]; ?>"><?= $row["estado"]; ?></option>
-
-<?php }
-
-}
-?>
-</select>
-
-</div>
-<div class="col-md-4">
-
-<label for="cat">Foto de perfil actual:</label>
-<img src="" id="img" width="150"; height="150";>
-</div>
-<div class="col-md-4">
-
-<label for="cat">Foto de perfil:</label>
-
-<input class="form-control form-control-sm" type="file" name="archivo">
-<img src="" name="imagen_actual" id="imagen_actual">
-<input class="form-control form-control-sm" type="hidden" name="id" id="id_usuario">
+<input type="hidden" class="form-control form-control-sm" name="id" id="id">
 <br>
 </div>
 
@@ -868,7 +794,7 @@ $("#fupForm2").submit(function(e){
     e.preventDefault();
     $.ajax({
       type: 'POST',
-      url: 'update-usuario.php',
+      url: 'update-curso.php',
       data: new FormData(this),
       dataType: 'json',
       contentType: false,
@@ -905,37 +831,17 @@ $(".actualizar").on("click",function()
  {
 
   var id = $(this).attr("data-id");
-  var codigo = $(this).attr("data-codigo");
   var nombre = $(this).attr("data-nombre");
-  var apellidos = $(this).attr("data-apellidos");
-  var dir = $(this).attr("data-dir");
-  var correo = $(this).attr("data-correo");
-  var tel = $(this).attr("data-tel");
-  var movil = $(this).attr("data-movil");
-  var usuario = $(this).attr("data-usuario");
-  var pass = $(this).attr("data-pass");
-  var rol = $(this).attr("data-rol");
-   var estado = $(this).attr("data-estado");
-   var img = $(this).attr("data-img");
-   
-  //numeros_contacto = numeros_contacto.split(',');
+  var descripcion = $(this).attr("data-descripcion");
+  var duracion = $(this).attr("data-duracion");
+  var profesor_asignado = $(this).attr("data-asignado");
   
+  $("#id").val(id);
+  $("#nombre_curso").val(nombre);
+  $("#descripcion").val(descripcion);
+  $("#duracion").val(duracion);
+  $('#asignado option[value="'+profesor_asignado+'"]').attr("selected", true);
   
-  $("#id_usuario").val(id);
-  $("#nombre").val(nombre);
-  $("#apellidos").val(apellidos);
-  $("#dir").val(dir);
-  $("#correo").val(correo);
-  $("#tel").val(tel);
-  $("#movil").val(movil);
-  $("#user2").val(usuario);
-  $("#pass0").val(pass);
-  $('#cmbrol option[value="'+rol+'"]').attr("selected", true);
-  $('#cmbestado option[value="'+estado+'"]').attr("selected", true);
-  $("#img").attr("src","dist/img/users/"+img);
-  $("#imagen_actual").val(img);
-  
-
   $("#myModalActualizar").modal({show:true});
   
 });
