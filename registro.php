@@ -26,71 +26,42 @@
       <form id="fupForm">
         <div class="input-group mb-3">
           <input type="text" class="form-control" name="nombre" placeholder="Nombre">
-          <div class="input-group-append">
+          <!-- <div class="input-group-append">
             <div class="input-group-text">
               
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="input-group mb-3">
           <input type="text" class="form-control" name="apellidos" placeholder="Apellidos">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              
-            </div>
-          </div>
+          
         </div>
 
         <div class="input-group mb-3">
           <input type="text" class="form-control" name="dir" placeholder="Dirección">
-          <div class="input-group-append">
-            <div class="input-group-text">
-                <!-- <i class="fas fa-solid fa-location-dot"></i>
-              <span class="fas fa-solid fa-location-dot"></span> -->
-            </div>
-          </div>
+          
         </div>
         <div class="input-group mb-3">
           <input type="email" class="form-control" name="correo" placeholder="Correo">
-          <div class="input-group-append">
-            <div class="input-group-text">
-             
-            </div>
-          </div>
+          
         </div>
 
         <div class="input-group mb-3">
           <input type="email" class="form-control" name="tel" placeholder="Teléfono">
-          <div class="input-group-append">
-            <div class="input-group-text">
-             
-            </div>
-          </div>
+          
         </div>
 
         <div class="input-group mb-3">
           <input type="email" class="form-control" name="movil" placeholder="Móvil">
-          <div class="input-group-append">
-            <div class="input-group-text">
-             
-            </div>
-          </div>
+          
         </div>
         <div class="input-group mb-3">
           <input type="password" class="form-control" placeholder="Password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              
-            </div>
-          </div>
+          
         </div>
         <div class="input-group mb-3">
           <input type="password" class="form-control" placeholder="Retype password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-             
-            </div>
-          </div>
+          
         </div>
         <div class="row">
           <div class="col-8">
