@@ -27,7 +27,7 @@ unlink("dist/img/users/".$imagen);
 
 
 
-$sql = "DELETE FROM users WHERE id=:id";
+$sql = "DELETE FROM users WHERE id_usuario=:id";
 $stmt = $con->prepare($sql);
 $stmt->bindParam(':id', $id, PDO::PARAM_STR); 
 $stmt->execute();
