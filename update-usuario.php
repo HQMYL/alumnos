@@ -31,17 +31,35 @@ if(isset($_POST['nombre']))
     $nombre = $_POST["nombre"];
 }
 
-$descripcion = "";
-if(isset($_POST['descripcion'])) 
+$apellidos = "";
+if(isset($_POST['apellidos'])) 
 {
-    $descripcion = $_POST["descripcion"];
+    $apellidos = $_POST["apellidos"];
 }
 
+
+$dir = "";
+if(isset($_POST['dir'])) 
+{
+    $dir = $_POST["dir"];
+}
+
+$correo = "";
+if(isset($_POST['correo'])) 
+{
+    $correo = $_POST["correo"];
+}
 
 $tel = "";
 if(isset($_POST['tel'])) 
 {
     $tel = $_POST["tel"];
+}
+
+$movil = "";
+if(isset($_POST['movil'])) 
+{
+    $movil = $_POST["movil"];
 }
 
 $user = "";
@@ -50,19 +68,6 @@ if(isset($_POST['user']))
     $user = $_POST['user'];
 }
 
-
-$estado = "";
-if(isset($_POST['cmbestado'])) 
-{
-    $estado = $_POST['cmbestado'];
-}
-
-if (empty($_POST['cmbestado'])) 
-{
-  $estado = $_POST['estado'];
-}
-
-
 $pass = "";
 if(isset($_POST['pass'])) 
 {
@@ -70,16 +75,20 @@ if(isset($_POST['pass']))
     $pass = md5($pass);
 }
 
-if (empty($_POST['pass'])) 
+
+$rol = "";
+if(isset($_POST['cmbrol'])) 
 {
-  $pass = $_POST['pass1'];
+    $rol = $_POST['cmbrol'];
 }
 
-$pass2 = "";
-if(isset($_POST['pass2'])) 
+$estado = "";
+if(isset($_POST['cmbestado'])) 
 {
-    $pass2 = $_POST['pass2'];
+    $estado = $_POST['cmbestado'];
 }
+
+
 
 $id = "";
 if (isset($_POST["id"])) 
@@ -108,7 +117,7 @@ $imgFile = $_FILES['archivo']['name'];
     if($imgFile)
        #ACTUALIZACIÓN SI SE ENVÍA IMAGEN 
     {  
-      $upload_dir = 'assets/images/users/'; // upload directory 
+      $upload_dir = 'dist/img/users/'; // upload directory 
       $imgExt = strtolower(pathinfo($imgFile,PATHINFO_EXTENSION)); // get image extension
       $valid_extensions = array('jpeg', 'jpg', 'png', 'gif','jfif'); // valid extensions
       $userpic = mt_rand(1000,1000000).".".$imgExt;
@@ -134,12 +143,16 @@ if(!isset($errMSG))
      
      $stmt = $DB_con->prepare('UPDATE users 
         
-        SET nombre=:nombre,descripcion=:descripcion,telefono=:tel,usuario=:user,pass=:pass,status=:estado,img=:userpic WHERE id=:id');
+        SET nombre=:nombre,apellidos=:apellidos,direccion=:dir,correo=:correo,telefono=:tel,movil=:movil,usuario=:user,pass=:pass,id_tipo=:rol,id_estado_usuario=:estado,img=:userpic WHERE id_usuario=:id');
           $stmt->bindParam(':nombre', $nombre);
-          $stmt->bindParam(':descripcion',$descripcion);
+          $stmt->bindParam(':apellidos', $apellidos);
+          $stmt->bindParam(':dir', $dir);
+          $stmt->bindParam(':correo',$correo);
           $stmt->bindParam(':tel', $tel);
+          $stmt->bindParam(':movil',$movil);
           $stmt->bindParam(':user', $user);
           $stmt->bindParam(':pass', $pass);
+          $stmt->bindParam(':rol', $rol);
           $stmt->bindParam(':estado', $estado);
           $stmt->bindParam(':userpic', $userpic);
           $stmt->bindParam(':id', $id);
@@ -152,7 +165,7 @@ $response['message'] = 'Usuario actualizado correctamente';
 
 if ($imagen_actual != "") 
 {
-unlink("assets/images/users/".$imagen_actual); 
+unlink("dist/img/users/".$imagen_actual); 
 }
 
 
@@ -179,12 +192,16 @@ else
 
       $stmt = $DB_con->prepare('UPDATE users 
         
-        SET nombre=:nombre,descripcion=:descripcion,telefono=:tel,usuario=:user,pass=:pass,status=:estado WHERE id=:id');
+        SET nombre=:nombre,apellidos=:apellidos,direccion=:dir,correo=:correo,telefono=:tel,movil=:movil,usuario=:user,pass=:pass,id_tipo=:rol,id_estado_usuario=:estado WHERE id_usuario=:id');
           $stmt->bindParam(':nombre', $nombre);
-          $stmt->bindParam(':descripcion',$descripcion);
+          $stmt->bindParam(':apellidos', $apellidos);
+          $stmt->bindParam(':dir', $dir);
+          $stmt->bindParam(':correo',$correo);
           $stmt->bindParam(':tel', $tel);
+          $stmt->bindParam(':movil',$movil);
           $stmt->bindParam(':user', $user);
           $stmt->bindParam(':pass', $pass);
+          $stmt->bindParam(':rol', $rol);
           $stmt->bindParam(':estado', $estado);
           $stmt->bindParam(':id', $id);
         
