@@ -1,3 +1,6 @@
+<?php
+include("conexion.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,83 +18,144 @@
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition register-page">
-<div class="register-box">
+<div class="col-lg-12">
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
       <a href="./" class="h1"><b>Sistema académico</b></a>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Registráte</p>
-      
+
       <form id="fupForm">
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="nombre" placeholder="Nombre">
-          <!-- <div class="input-group-append">
-            <div class="input-group-text">
-              
-            </div>
-          </div> -->
-        </div>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="apellidos" placeholder="Apellidos">
-          
-        </div>
+<div class="row">
+<div class="col-md-4">
+<label>Nombre</label>
+<input type="text" class="form-control form-control-sm" name="nombre" placeholder="Nombre">
+</div>
 
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="dir" placeholder="Dirección">
-          
-        </div>
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" name="correo" placeholder="Correo">
-          
-        </div>
+<div class="col-md-4">
+<label>Apellidos</label>
+<input type="text" class="form-control form-control-sm" name="apellidos" placeholder="Apellidos">
+</div>
 
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" name="tel" placeholder="Teléfono">
-          
-        </div>
+<div class="col-md-4">
+<label>Dirección</label>
+<input type="text" class="form-control form-control-sm" name="dir" placeholder="Dirección">
+</div>
 
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" name="movil" placeholder="Móvil">
-          
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password">
-          
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Retype password">
-          
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-              <label for="agreeTerms">
-               I agree to the <a href="#">terms</a>
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Register</button>
-          </div>
-          <!-- /.col -->
-        </div>
-      </form>
+<div class="col-md-4">
+<label>Correo</label>
+<input type="text" class="form-control form-control-sm" name="correo" placeholder="Correo">
+</div>
 
-      <div class="social-auth-links text-center">
-        <a href="#" class="btn btn-block btn-primary">
-          <i class="fab fa-facebook mr-2"></i>
-          Sign up using Facebook
-        </a>
-        <a href="#" class="btn btn-block btn-danger">
-          <i class="fab fa-google-plus mr-2"></i>
-          Sign up using Google+
-        </a>
-      </div>
+<div class="col-md-4">
+<label>Teléfono</label>
 
-      <a href="login.html" class="text-center">I already have a membership</a>
+<input type="text" class="form-control form-control-sm" name="tel" placeholder="Teléfono">
+
+</div>
+
+<div class="col-md-4">
+<label>Móvil</label>
+<input type="text" class="form-control form-control-sm" name="movil" placeholder="Móvil">
+</div>
+
+<div class="col-md-4">
+<label>Usuario</label>
+<input type="text" class="form-control form-control-sm" name="user" id="user" placeholder="Usuario">
+<h3 id="comprobar"></h3>
+
+</div>
+
+<div class="col-md-4">
+<label>Contraseña</label>
+<input class="form-control form-control-sm" type="password" name="pass" id="pass1">
+</div>
+
+<div class="col-md-4">
+
+<label for="cat">Confirmar contraseña:</label>
+
+<input class="form-control form-control-sm" type="password" id="pass2">
+
+<div id="respuesta" style="display: none;"><h3>Las contraseñas introducidas no son iguales</h3></div>
+</div>
+
+<div class="col-md-4">
+<label>Tipo de usuario</label>
+<select class="form-control form-control-sm" name="cmbrol">
+<option value="">Seleccione...</option>
+<?php 
+$sth = $con->prepare("SELECT * FROM roles ");
+#$sth->bindParam(1, $usuario);
+$sth->execute();
+
+if ($sth->rowCount() > 0) {
+
+foreach ($sth as $row ) 
+{ ?>
+
+<option value="<?= $row["id_rol"]; ?>"><?= $row["rol"]; ?></option>
+
+<?php }
+
+}
+?>
+</select>
+
+</div>
+
+<div class="col-md-4">
+
+<label for="cat">Estado:</label>
+<select class="form-control form-control-sm" name="cmbestado">
+<option value="">Seleccione...</option>
+<?php 
+$sth = $con->prepare("SELECT * FROM estados ");
+#$sth->bindParam(1, $usuario);
+$sth->execute();
+
+if ($sth->rowCount() > 0) {
+
+foreach ($sth as $row ) 
+{ ?>
+
+<option value="<?= $row["id"]; ?>"><?= $row["estado"]; ?></option>
+
+<?php }
+
+}
+?>
+</select>
+
+</div>
+
+<div class="col-md-4">
+
+<label for="cat">Foto de perfil:</label>
+
+<input class="form-control form-control-sm" type="file" name="archivo">
+<br>
+</div>
+
+</div> <!--FINAL ROW-->
+<div class="row">
+
+<!-- /.col -->
+<div class="col-4">
+<input type="submit" name="submit" class="btn btn-primary btn-rounded submitBtn" value="Guardar"/>
+<!--<button type="submit" class="btn btn-secondary">Guardar</button>-->
+
+
+</div>
+
+<!-- /.col -->
+</div>
+<div class="statusMsg"></div>
+</form>
+      
+
+      <a href="./" class="text-center">Ya tienes cuenta ?</a>
     </div>
     <!-- /.form-box -->
   </div><!-- /.card -->
