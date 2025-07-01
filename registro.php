@@ -85,9 +85,11 @@ include("conexion.php");
 <label>Tipo de usuario</label>
 <select class="form-control form-control-sm" name="cmbrol">
 <option value="">Seleccione...</option>
-<?php 
-$sth = $con->prepare("SELECT * FROM roles ");
-#$sth->bindParam(1, $usuario);
+<?php
+$admin = "";
+$admin = "1"; 
+$sth = $con->prepare("SELECT * FROM roles WHERE id_rol != ? ");
+$sth->bindParam(1, $admin);
 $sth->execute();
 
 if ($sth->rowCount() > 0) {
@@ -168,5 +170,43 @@ foreach ($sth as $row )
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+<script type="text/javascript">
+  
+   $(document).ready(function() {   
+
+
+    $("#fupForm").submit(function(e){
+    e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: 'guardar-usuario.php',
+      data: new FormData(this),
+      dataType: 'json',
+      contentType: false,
+      cache: false,
+      processData:false,
+      beforeSend: function(){
+        $('.submitBtn').attr("disabled","disabled");
+        $('#fupForm').css("opacity",".5");
+
+      },
+      success: function(response){
+        $('.statusMsg').html('');
+        if(response.status == 1){
+          $('#fupForm')[0].reset();
+          //$('.statusMsg').css("background-color","green");
+          $('.statusMsg').html('<p class="alert alert-primary">'+response.message+'</p>');
+        }else{
+          $('.statusMsg').html('<p class="alert alert-danger">'+response.message+'</p>');
+        }
+        $('#fupForm').css("opacity","");
+        $(".submitBtn").removeAttr("disabled");
+        setTimeout("location.reload()", 3000);
+      }
+    });
+  });
+     
+  });
+</script>
 </body>
 </html>
