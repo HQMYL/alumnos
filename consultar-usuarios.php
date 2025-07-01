@@ -468,7 +468,7 @@ echo '<tr><td colspan="6"><h2>No hay registros</h2></td></tr>';
 
 <div class="col-md-4">
 <label>Apellidos</label>
-<input type="text" class="form-control form-control-sm" name="nombre" placeholder="Nombre">
+<input type="text" class="form-control form-control-sm" name="apellidos" placeholder="Apellidos">
 </div>
 
 <div class="col-md-4">
@@ -656,7 +656,7 @@ foreach ($sth as $row )
 <div class="col-md-4">
 <label>Contraseña</label>
 <input class="form-control form-control-sm" type="hidden" name="pass" id="pass0">
-<input class="form-control form-control-sm" type="password" name="pass" id="pass11">
+<input class="form-control form-control-sm" type="password" name="pass11" id="pass11">
 </div>
 
 <div class="col-md-4">

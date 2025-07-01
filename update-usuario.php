@@ -69,10 +69,15 @@ if(isset($_POST['user']))
 }
 
 $pass = "";
-if(isset($_POST['pass'])) 
+if(isset($_POST['pass11'])) 
 {
-    $pass = $_POST['pass'];
+    $pass = $_POST['pass11'];
     $pass = md5($pass);
+}
+
+if (empty($_POST['pass11'])) 
+{
+  $pass = $_POST['pass'];
 }
 
 
