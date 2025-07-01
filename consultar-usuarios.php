@@ -719,13 +719,15 @@ foreach ($sth as $row )
 <div class="col-md-4">
 
 <label for="cat">Foto de perfil actual:</label>
-<img src="" id="img">
+<img src="" id="img" width="150"; height="150";>
 </div>
 <div class="col-md-4">
 
 <label for="cat">Foto de perfil:</label>
 
 <input class="form-control form-control-sm" type="file" name="archivo">
+<img src="" name="imagen_actual" id="imagen_actual">
+<input class="form-control form-control-sm" type="text" name="id" id="id_usuario">
 <br>
 </div>
 
@@ -742,7 +744,7 @@ foreach ($sth as $row )
 
 <!-- /.col -->
 </div>
-<div class="statusMsg"></div>
+<div class="statusMsg2"></div>
 </form>
 
 </div>
@@ -840,7 +842,8 @@ function searchFilter(page_num) {
 
 $(document).ready(function() {
    
-  $("#pass2").keyup(function(){
+  $("#pass2").keyup(function()
+  {
           
       var cla1=$("#pass1").val();
       var cla2=$("#pass2").val();
@@ -852,6 +855,24 @@ $(document).ready(function() {
     }
 else {
     $("#respuesta").css("display","none"); 
+  
+}
+
+
+});
+
+$("#pass12").keyup(function(){
+          
+      var cla11=$("#pass11").val();
+      var cla12=$("#pass12").val();
+      
+      
+    if (cla11 != cla12) {
+      $("#respuesta2").css("display","block"); 
+    
+    }
+else {
+    $("#respuesta2").css("display","none"); 
   
 }
 
@@ -909,7 +930,36 @@ $("input").keydown(function (e){
     });
   });
 
+$("#fupForm2").submit(function(e){
+    e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: 'update-usuario.php',
+      data: new FormData(this),
+      dataType: 'json',
+      contentType: false,
+      cache: false,
+      processData:false,
+      beforeSend: function(){
+        $('.submitBtn2').attr("disabled","disabled");
+        $('#fupForm2').css("opacity",".5");
 
+      },
+      success: function(response){
+        $('.statusMsg2').html('');
+        if(response.status == 1){
+          $('#fupForm2')[0].reset();
+          //$('.statusMsg').css("background-color","green");
+          $('.statusMsg2').html('<p class="alert alert-primary">'+response.message+'</p>');
+        }else{
+          $('.statusMsg2').html('<p class="alert alert-danger">'+response.message+'</p>');
+        }
+        $('#fupForm2').css("opacity","");
+        $(".submitBtn2").removeAttr("disabled");
+        setTimeout("location.reload()", 3000);
+      }
+    });
+  });
 
      
   });
@@ -932,8 +982,8 @@ $(".actualizar").on("click",function()
   var pass = $(this).attr("data-pass");
   var rol = $(this).attr("data-rol");
    var estado = $(this).attr("data-estado");
-   console.log(estado);
    var img = $(this).attr("data-img");
+   
   //numeros_contacto = numeros_contacto.split(',');
   
   
@@ -949,6 +999,7 @@ $(".actualizar").on("click",function()
   $('#cmbrol option[value="'+rol+'"]').attr("selected", true);
   $('#cmbestado option[value="'+estado+'"]').attr("selected", true);
   $("#img").attr("src","dist/img/users/"+img);
+  $("#imagen_actual").val(img);
   
 
   $("#myModalActualizar").modal({show:true});
