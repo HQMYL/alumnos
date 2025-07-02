@@ -475,7 +475,7 @@ echo '<tr><td colspan="6"><h2>No hay registros</h2></td></tr>';
 
 <!-- Modal 2 -->
 <div class="modal fade" id="myModalActualizar" role="dialog" style="overflow-y: scroll;">
-<div class="modal-dialog modal-lg">
+<div class="modal-dialog">
 
 <!-- Modal content-->
 <div class="modal-content">
@@ -486,10 +486,11 @@ echo '<tr><td colspan="6"><h2>No hay registros</h2></td></tr>';
 <div class="modal-body">
 <form id="fupForm2">
 <div class="row">
-<div class="col-md-4">
+<div class="col-md-6">
 <label>Tipo de trabajo</label>
 <input type="text" class="form-control form-control-sm" name="tipo" id="tipo">
-<input type="text" class="form-control form-control-sm" name="id" id="id">
+<input type="hidden" class="form-control form-control-sm" name="id" id="id">
+<br>
 </div>
 
 
@@ -544,12 +545,11 @@ echo '<tr><td colspan="6"><h2>No hay registros</h2></td></tr>';
 function searchFilter(page_num) {
     page_num = page_num?page_num:0;
     var keywords = $('#keywords').val();
-    var rol = $('#cmbrol').val();
     
     $.ajax({
         type: 'POST',
-        url: 'GetUsuarios.php',
-        data:'page='+page_num+'&keywords='+keywords+'&rol='+rol,
+        url: 'GetTiposTrabajo.php',
+        data:'page='+page_num+'&keywords='+keywords,
         beforeSend: function () {
             $('.loading-overlay').show();
         },
@@ -571,77 +571,6 @@ function searchFilter(page_num) {
 }); 
 
 });
-</script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#user").keyup(function(){
-
-          var id = $("#user").val();
-    
-       $.ajax({
-
-           type: "POST",
-           url:"comprobacion.php",
-           data: {"id":id}, // Adjuntar los campos del formulario enviado.
-           
-           success: function(response) {
-            
-            $("#comprobar").html(response);
-            
-            
-            }
-
-
-         });
-
-    });
-
-   
-});    
-</script>
-
-
-<script type="text/javascript">
-
-$(document).ready(function() {
-   
-  $("#pass2").keyup(function()
-  {
-          
-      var cla1=$("#pass1").val();
-      var cla2=$("#pass2").val();
-      
-      
-    if (cla1 != cla2) {
-      $("#respuesta").css("display","block"); 
-    
-    }
-else {
-    $("#respuesta").css("display","none"); 
-  
-}
-
-
-});
-
-$("#pass12").keyup(function(){
-          
-      var cla11=$("#pass11").val();
-      var cla12=$("#pass12").val();
-      
-      
-    if (cla11 != cla12) {
-      $("#respuesta2").css("display","block"); 
-    
-    }
-else {
-    $("#respuesta2").css("display","none"); 
-  
-}
-
-
-});
-});  
 </script>
 
 <script type="text/javascript">
@@ -697,7 +626,7 @@ $("#fupForm2").submit(function(e){
     e.preventDefault();
     $.ajax({
       type: 'POST',
-      url: 'update-usuario.php',
+      url: 'update-tipo-trabajo.php',
       data: new FormData(this),
       dataType: 'json',
       contentType: false,
@@ -755,7 +684,7 @@ $(".delete").on("click",function(){
   var id = $(this).attr("data-id");
   
 Swal.fire({
-    title: 'Desea eliminar este usuario ?',
+    title: 'Desea eliminar este tipo de trabajo ?',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#bb414d', 
@@ -767,14 +696,14 @@ Swal.fire({
       $.ajax({
 
            type: "POST",
-           url:"eliminar-user.php",
+           url:"eliminar-tipo-trabajo.php",
            data: {"id":id}, // Adjuntar los campos del formulario enviado.
            
            success: function(response) {  
              Swal.fire({
   icon: 'success',
-  //title: 'Eliminar Propiedad',
-  text: 'Usuario eliminado correctamente'
+  title: 'Eliminar tipo de trabajo',
+  text: 'Tipo de trabajo eliminado correctamente'
   
 })
              setTimeout("location.reload()", 3000);
