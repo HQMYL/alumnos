@@ -479,13 +479,25 @@ echo '<tr><td colspan="6"><h2>No hay registros</h2></td></tr>';
 </div>
 
 <div class="col-md-4">
-<label>Apellidos</label>
-<input type="text" class="form-control form-control-sm" name="apellidos" placeholder="Apellidos">
+<label>Nivel educativo</label>
+<select class="form-control form-control-sm" name="cmbnivel">
+    <option value="">Seleccione...</option>
+    <option value="Preparatoria">Preparatoria</option>
+    <option value="Universidad">Universidad</option>
+</select>
 </div>
 
 <div class="col-md-4">
-<label>Dirección</label>
-<input type="text" class="form-control form-control-sm" name="dir" placeholder="Dirección">
+<label>Tipo de trabajo</label>
+<select class="form-control form-control-sm" name="cmbnivel">
+    <option value="">Seleccione...</option>
+    <option value="Ensayo">Ensayo</option>
+    <option value="Investigación">Investigación</option>
+    <option value="Programación">Programación</option>
+    <option value="Diseño">Diseño</option>
+    <option value="Presentación">Presentación</option>
+    <option value="Análisis de datos">Análisis de datos</option>
+</select>
 </div>
 
 <div class="col-md-4">
