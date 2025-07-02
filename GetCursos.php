@@ -160,7 +160,7 @@ $(".delete").on("click",function(){
   var id = $(this).attr("data-id");
   
 Swal.fire({
-    title: 'Desea eliminar este usuario ?',
+    title: 'Desea eliminar este curso ?',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#bb414d', 
@@ -172,14 +172,14 @@ Swal.fire({
       $.ajax({
 
            type: "POST",
-           url:"eliminar-user.php",
+           url:"eliminar-curso.php",
            data: {"id":id}, // Adjuntar los campos del formulario enviado.
            
            success: function(response) {  
              Swal.fire({
   icon: 'success',
-  //title: 'Eliminar Propiedad',
-  text: 'Usuario eliminado correctamente'
+  title: 'Eliminar Curso',
+  text: 'Curso eliminado correctamente'
   
 })
              setTimeout("location.reload()", 3000);
@@ -202,78 +202,6 @@ Swal.fire({
 });
 </script>
 
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#user").keyup(function(){
-
-          var id = $("#user").val();
-    
-       $.ajax({
-
-           type: "POST",
-           url:"comprobacion.php",
-           data: {"id":id}, // Adjuntar los campos del formulario enviado.
-           
-           success: function(response) {
-            
-            $("#comprobar").html(response);
-            
-            
-            }
-
-
-         });
-
-    });
-
-   
-});    
-</script>
-
-
-<script type="text/javascript">
-
-$(document).ready(function() {
-   
-  $("#pass2").keyup(function()
-  {
-          
-      var cla1=$("#pass1").val();
-      var cla2=$("#pass2").val();
-      
-      
-    if (cla1 != cla2) {
-      $("#respuesta").css("display","block"); 
-    
-    }
-else {
-    $("#respuesta").css("display","none"); 
-  
-}
-
-
-});
-
-$("#pass12").keyup(function(){
-          
-      var cla11=$("#pass11").val();
-      var cla12=$("#pass12").val();
-      
-      
-    if (cla11 != cla12) {
-      $("#respuesta2").css("display","block"); 
-    
-    }
-else {
-    $("#respuesta2").css("display","none"); 
-  
-}
-
-
-});
-});  
-</script>    
     <!-- Display pagination links -->
     <?= $pagination->createLinks(); ?>
 <?php

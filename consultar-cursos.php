@@ -398,7 +398,7 @@ while($row = $query->fetch_assoc()){
 <td><?= $row["nombre"]; ?> <?= $row["apellidos"]; ?></td>
 
 <td><button type="button" class="btn btn-info actualizar" data-id="<?= $row['id_curso'];?>" data-nombre="<?= $row['nombre_curso'];?>" data-descripcion="<?= $row['descripcion_curso'];?>" data-duracion="<?= $row['duracion'];?>" data-asignado="<?= $row['profesor_asignado'];?>">Editar</button></td>
-<td><button type="button" class="btn btn-danger delete"  data-id="<?= $row['id_usuario'];?>">Eliminar</button></td>
+<td><button type="button" class="btn btn-danger delete"  data-id="<?= $row['id_curso'];?>">Eliminar</button></td>
 </tr>
 <?php
 }
@@ -856,7 +856,7 @@ $(".delete").on("click",function(){
   var id = $(this).attr("data-id");
   
 Swal.fire({
-    title: 'Desea eliminar este usuario ?',
+    title: 'Desea eliminar este curso ?',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#bb414d', 
@@ -868,14 +868,14 @@ Swal.fire({
       $.ajax({
 
            type: "POST",
-           url:"eliminar-user.php",
+           url:"eliminar-curso.php",
            data: {"id":id}, // Adjuntar los campos del formulario enviado.
            
            success: function(response) {  
              Swal.fire({
   icon: 'success',
-  //title: 'Eliminar Propiedad',
-  text: 'Usuario eliminado correctamente'
+  title: 'Eliminar Curso',
+  text: 'Curso eliminado correctamente'
   
 })
              setTimeout("location.reload()", 3000);
