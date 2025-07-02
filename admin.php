@@ -267,7 +267,14 @@ h1,h2,h3,h4,h5,h6
       </div> -->
 
       <!-- Sidebar Menu -->
-      <?php include('menu.php'); ?>
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <?php include('menu.php'); ?>
+          
+        </ul>
+      </nav>
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
