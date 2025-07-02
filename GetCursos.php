@@ -62,7 +62,7 @@ if (isset($_SESSION["usuario"]))
     $pagination =  new Pagination($pagConfig);
 
     // Fetch records based on the offset and limit
-    $query = $db->query("SELECT a.*,b.* FROM cursos a LEFT JOIN users b ON a.profesor_asignado= b.id_usuario  $whereSQL ORDER BY a.id_curso DESC LIMIT $offset,$limit");
+    $query = $db->query("SELECT a.*,b.* FROM cursos a LEFT JOIN users b ON a.profesor_asignado= b.id_usuario  $whereSQL ORDER BY a.id_curso ASC LIMIT $offset,$limit");
 ?>
     <!-- Data list container -->
     
@@ -92,7 +92,7 @@ if (isset($_SESSION["usuario"]))
 <td><?= $row["duracion"]; ?></td>
 <td><?= $row["nombre"]; ?> <?= $row["apellidos"]; ?></td>
 <td><button type="button" class="btn btn-info actualizar" data-id="<?= $row['id_curso'];?>" data-nombre="<?= $row['nombre_curso'];?>" data-descripcion="<?= $row['descripcion_curso'];?>" data-duracion="<?= $row['duracion'];?>" data-asignado="<?= $row['profesor_asignado'];?>">Editar</button></td>
-<td><button type="button" class="btn btn-danger delete"  data-id="<?= $row['id_usuario'];?>">Eliminar</button></td>
+<td><button type="button" class="btn btn-danger delete"  data-id="<?= $row['id_curso'];?>">Eliminar</button></td>
 </tr>
             <?php
                     }

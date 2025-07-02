@@ -62,7 +62,7 @@ if (isset($_SESSION["usuario"]))
     $pagination =  new Pagination($pagConfig);
 
     // Fetch records based on the offset and limit
-    $query = $db->query("SELECT a.*,b.* FROM users a LEFT JOIN roles b ON a.id_tipo = b.id_rol  $whereSQL ORDER BY id_usuario DESC LIMIT $offset,$limit");
+    $query = $db->query("SELECT a.*,b.* FROM users a LEFT JOIN roles b ON a.id_tipo = b.id_rol  $whereSQL ORDER BY id_usuario ASC LIMIT $offset,$limit");
 ?>
     <!-- Data list container -->
     

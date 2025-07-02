@@ -178,6 +178,34 @@ else {
       {
         $response['status'] = 1;
     $response['message'] = $exito;
+    
+    /* ENVÍO DE CORREO */
+
+      $message = '<html>
+ </head>
+ <title>registro</title>
+ </head>
+ <body>
+ <p>Saludos,'.$nombre." ".$apellidos.'para completar tu registro visita el siguiente enlace para verificar tu cuenta:<a href="https://www.laboratoriospanda.com.mx/set-password.php?id='.$correo.'" class="btn btn-success">Confirmar</a></p>
+ 
+ </body>
+ </html>';
+    #$message = utf8_decode($message);
+ $headers = [
+    'From' => 'Laboratorios Panda <info@laboratoriospanda.com.mx>',
+    'X-Sender' => 'Laboratorios Panda <info@laboratoriospanda.com.mx>',
+    'X-Mailer' => 'PHP/' . phpversion(),
+    'X-Priority' => '1',
+    'Return-Path' => 'laboratoriospanda.com.mx',
+    'MIME-Version' => '1.0',
+    'Content-Type' => 'text/html; charset=iso-8859-1'
+];
+
+mail($correo,'Registro',$message,$headers);
+
+
+    /* ENVÍO DE CORREO */
+
     echo  json_encode($response);
         #$successMSG = "new record succesfully inserted ...";
         #header("refresh:5;index.php"); // redirects image view page after 5 seconds.
