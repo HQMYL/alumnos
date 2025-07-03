@@ -475,15 +475,15 @@ echo '<tr><td colspan="6"><h2>No hay registros</h2></td></tr>';
 <!-- Modal content-->
 <div class="modal-content">
 <div class="modal-header" style="background-color: #337AFF;">
-<p class="modal-title" style="color: #fff;">Actualizar tipo de trabajo</p>
+<p class="modal-title" style="color: #fff;">Actualizar nivel educativo</p>
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 </div>
 <div class="modal-body">
 <form id="fupForm2">
 <div class="row">
 <div class="col-md-6">
-<label>Tipo de trabajo</label>
-<input type="text" class="form-control form-control-sm" name="tipo" id="tipo">
+<label>Nivel educativo</label>
+<input type="text" class="form-control form-control-sm" name="nivel" id="nivel">
 <input type="hidden" class="form-control form-control-sm" name="id" id="id">
 <br>
 </div>
@@ -543,7 +543,7 @@ function searchFilter(page_num) {
     
     $.ajax({
         type: 'POST',
-        url: 'GetTiposTrabajo.php',
+        url: 'GetNiveles.php',
         data:'page='+page_num+'&keywords='+keywords,
         beforeSend: function () {
             $('.loading-overlay').show();
@@ -590,7 +590,7 @@ $("input").keydown(function (e){
     e.preventDefault();
     $.ajax({
       type: 'POST',
-      url: 'guardar-tipo-trabajo.php',
+      url: 'guardar-nivel-educativo.php',
       data: new FormData(this),
       dataType: 'json',
       contentType: false,
@@ -621,7 +621,7 @@ $("#fupForm2").submit(function(e){
     e.preventDefault();
     $.ajax({
       type: 'POST',
-      url: 'update-tipo-trabajo.php',
+      url: 'update-nivel-educativo.php',
       data: new FormData(this),
       dataType: 'json',
       contentType: false,
@@ -658,16 +658,14 @@ $(".actualizar").on("click",function()
  {
 
   var id = $(this).attr("data-id");
-  var tipo = $(this).attr("data-tipo");
+  var nivel = $(this).attr("data-nivel");
   
   $("#id").val(id);
-  $("#tipo").val(tipo);
+  $("#nivel").val(nivel);
 
   $("#myModalActualizar").modal({show:true});
   
 });
-
-
 
 });
 </script>
@@ -679,7 +677,7 @@ $(".delete").on("click",function(){
   var id = $(this).attr("data-id");
   
 Swal.fire({
-    title: 'Desea eliminar este tipo de trabajo ?',
+    title: 'Desea eliminar este nivel educativo ?',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#bb414d', 
@@ -691,7 +689,7 @@ Swal.fire({
       $.ajax({
 
            type: "POST",
-           url:"eliminar-tipo-trabajo.php",
+           url:"eliminar-nivel-educativo.php",
            data: {"id":id}, // Adjuntar los campos del formulario enviado.
            
            success: function(response) {  

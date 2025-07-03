@@ -28,7 +28,7 @@ if (isset($_SESSION["usuario"]))
     include("dbConfig.php");
   
   // Set some useful configuration
-  $baseURL = 'GetMaterias.php';
+  $baseURL = 'GetNiveles.php';
   $offset = !empty($_POST['page'])?$_POST['page']:0;
   $limit = 5;
   
@@ -38,12 +38,12 @@ if (isset($_SESSION["usuario"]))
     $whereSQL = 'WHERE TRUE';
     if(!empty($_POST['keywords']))
     {
-        $whereSQL = $whereSQL." AND materia LIKE '%".$_POST['keywords']."%'";
+        $whereSQL = $whereSQL." AND nivel_educativo LIKE '%".$_POST['keywords']."%'";
     }
 
     
 
-    $query   = $db->query("SELECT COUNT(*) as rowNum FROM materias ".$whereSQL);
+    $query   = $db->query("SELECT COUNT(*) as rowNum FROM niveles_educativos ".$whereSQL);
     $result  = $query->fetch_assoc();
     $rowCount= $result['rowNum'];
   
@@ -59,7 +59,7 @@ if (isset($_SESSION["usuario"]))
     $pagination =  new Pagination($pagConfig);
 
     // Fetch records based on the offset and limit
-    $query = $db->query("SELECT * FROM materias $whereSQL ORDER BY id_materia ASC LIMIT $offset,$limit");
+    $query = $db->query("SELECT * FROM niveles_educativos $whereSQL ORDER BY id_nivel ASC LIMIT $offset,$limit");
 ?>
     <!-- Data list container -->
     
@@ -81,9 +81,9 @@ if (isset($_SESSION["usuario"]))
                 $offset++
         ?>
 <tr>
-<td><?= $row["materia"]; ?></td>
-<td><button type="button" class="btn btn-info actualizar" data-id="<?= $row['id_materia'];?>" data-materia="<?= $row['tipo_materia'];?>">Editar</button></td>
-<td><button type="button" class="btn btn-danger delete"  data-id="<?= $row['id_materia'];?>">Eliminar</button></td>
+<td><?= $row["nivel_educativo"]; ?></td>
+<td><button type="button" class="btn btn-info actualizar" data-id="<?= $row['id_nivel'];?>" data-nivel="<?= $row['nivel_educativo'];?>">Editar</button></td>
+<td><button type="button" class="btn btn-danger delete"  data-id="<?= $row['id_nivel'];?>">Eliminar</button></td>
 </tr>
             <?php
                     }
@@ -112,16 +112,14 @@ $(".actualizar").on("click",function()
  {
 
   var id = $(this).attr("data-id");
-  var materia = $(this).attr("data-materia");
+  var nivel = $(this).attr("data-nivel");
   
   $("#id").val(id);
-  $("#materia").val(materia);
+  $("#nivel").val(nivel);
 
   $("#myModalActualizar").modal({show:true});
   
 });
-
-
 
 });
 </script>
@@ -133,7 +131,7 @@ $(".delete").on("click",function(){
   var id = $(this).attr("data-id");
   
 Swal.fire({
-    title: 'Desea eliminar esta materia ?',
+    title: 'Desea eliminar este nivel educativo ?',
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#bb414d', 
@@ -145,14 +143,14 @@ Swal.fire({
       $.ajax({
 
            type: "POST",
-           url:"eliminar-materia.php",
+           url:"eliminar-nivel-educativo.php",
            data: {"id":id}, // Adjuntar los campos del formulario enviado.
            
            success: function(response) {  
              Swal.fire({
   icon: 'success',
-  title: 'Eliminar materia',
-  text: 'Materia eliminada correctamente'
+  title: 'Eliminar nivel educativo',
+  text: 'Nivel educativo eliminado correctamente'
   
 })
              setTimeout("location.reload()", 3000);
