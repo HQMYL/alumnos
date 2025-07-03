@@ -696,6 +696,7 @@ foreach ($sth as $row )
         <a href="javascript:void(0);" class="agregar_documento" title="Add field">  <img src="dist/img/iconos/add-icon.png"/></a>
           </div>
          </div>
+         <input type="text" class="form-control form-control-sm" name="id_estudiante" id="id_estudiante" value="<?= $usuario_id; ?>">
 </div>
 
 </div> <!--FINAL ROW-->
