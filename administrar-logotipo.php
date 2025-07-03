@@ -402,9 +402,9 @@ echo '<tr><td colspan="6"><h2>No hay registros</h2></td></tr>';
 <div class="row">
 <div class="col-md-6">
 <label>Nueva foto</label>
-<input type="text" class="form-control form-control-sm" name="archivo">
-<input type="text" class="form-control form-control-sm" name="archivo_actual" id="archivo_actual">
-<input type="hidden" class="form-control form-control-sm" name="id" id="id">
+<input type="file" class="form-control form-control-sm" name="archivo">
+<input type="text" class="form-control form-control-sm" name="imagen_actual" id="imagen_actual">
+<input type="text" class="form-control form-control-sm" name="id" id="id">
 <br>
 </div>
 
@@ -510,7 +510,7 @@ $("input").keydown(function (e){
     e.preventDefault();
     $.ajax({
       type: 'POST',
-      url: 'guardar-materia.php',
+      url: 'update-logotipo.php',
       data: new FormData(this),
       dataType: 'json',
       contentType: false,
@@ -536,38 +536,6 @@ $("input").keydown(function (e){
       }
     });
   });
-
-$("#fupForm2").submit(function(e){
-    e.preventDefault();
-    $.ajax({
-      type: 'POST',
-      url: 'update-materia.php',
-      data: new FormData(this),
-      dataType: 'json',
-      contentType: false,
-      cache: false,
-      processData:false,
-      beforeSend: function(){
-        $('.submitBtn2').attr("disabled","disabled");
-        $('#fupForm2').css("opacity",".5");
-
-      },
-      success: function(response){
-        $('.statusMsg2').html('');
-        if(response.status == 1){
-          $('#fupForm2')[0].reset();
-          //$('.statusMsg').css("background-color","green");
-          $('.statusMsg2').html('<p class="alert alert-primary">'+response.message+'</p>');
-        }else{
-          $('.statusMsg2').html('<p class="alert alert-danger">'+response.message+'</p>');
-        }
-        $('#fupForm2').css("opacity","");
-        $(".submitBtn2").removeAttr("disabled");
-        setTimeout("location.reload()", 3000);
-      }
-    });
-  });
-
      
   });
 </script>
@@ -578,10 +546,10 @@ $(".actualizar").on("click",function()
  {
 
   var id = $(this).attr("data-id");
-  var materia = $(this).attr("data-materia");
+  var imagen = $(this).attr("data-imagen");
   
   $("#id").val(id);
-  $("#materia").val(materia);
+  $("#imagen_actual").val(imagen);
 
   $("#myModalActualizar").modal({show:true});
   
