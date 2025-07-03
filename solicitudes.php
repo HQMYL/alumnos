@@ -15,7 +15,6 @@ else {
    header('Location: ./');
 }
 
-
 $rol = "";
 $usuario_id = "";
 $foto_perfil = "";
@@ -66,7 +65,7 @@ $anno = date("Y");
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <link rel="stylesheet" href="dist/css/nueva.css">
-  
+  <link rel="stylesheet" href="jquery-ui/jquery-ui.css">
 </head>
 <!--
 `body` tag options:
@@ -362,7 +361,7 @@ $limit = 5;
 // Count of all records
 #$mar = "208";
 #$whereSQL = "WHERE users.id = establecimientos.id_usuario ";
-$query   = $db->query("SELECT  COUNT(*) as rowNum FROM s ");
+$query   = $db->query("SELECT  COUNT(*) as rowNum FROM solicitudes ");
 $result  = $query->fetch_assoc();
 $rowCount= $result['rowNum'];
 
@@ -377,7 +376,7 @@ $pagConfig = array(
 $pagination =  new Pagination($pagConfig);
 
 // Fetch records based on the limit
-$query = $db->query("SELECT a.*,b.* FROM users a LEFT JOIN roles b ON a.id_tipo = b.id_rol  ORDER BY a.id_usuario ASC LIMIT $limit");
+$query = $db->query("SELECT * FROM solicitudes ORDER BY id_solicitud ASC LIMIT $limit");
 
 
 if($query->num_rows > 0){?>
@@ -386,8 +385,8 @@ if($query->num_rows > 0){?>
 <thead>
 <tr>
 
-<th>Nombre</th>
-<th>Correo</th>
+<th>Título</th>
+<th></th>
 <th>Móvil</th>
 <th>Tipo</th>
 <th>Editar</th>
@@ -427,6 +426,130 @@ echo '<tr><td colspan="6"><h2>No hay registros</h2></td></tr>';
 <?php }
 ?>
 
+<?php 
+if ($rol == "3") 
+{ ?>
+<button type="button" class="btn btn-info agregar_solicitud"><i class="fa fa-solid fa-plus"></i> Agregar solicitud</button>
+<label for="inputEmail4"></label>
+<div class="row align-items-stretch mb-5">
+<div class="col-md-6">
+<div class="form-group">
+<label for="inputPassword4">Filtrar</label>
+<input type="text" class="form-control form-control-sm" name="keywords" id="keywords" onkeyup="searchFilter();"><br>
+<input type="button" class="btn btn-primary" value="Buscar" onclick="searchFilter();">
+<a href="<?= $_SERVER['PHP_SELF'];?>" class="btn btn-danger"><i class="fa fa-fw fa-sync"></i>Limpiar</a>
+</div>
+</div>
+
+<div class="col-md-6">
+<div class="form-group">
+<label for="inputPassword4">Filtrar por asesor</label>
+<select class="form-control form-control-sm" name="cmbasesor" id="cmbasesor" onchange="searchFilter();">
+                  <option value="">Seleccione...</option>
+                  <?php
+                  $asesor = "";
+                  $asesor = "2"; 
+$sth = $con->prepare("SELECT * FROM users WHERE id_tipo = ?");
+$sth->bindParam(1, $asesor);
+$sth->execute();
+
+if ($sth->rowCount() > 0) {
+
+foreach ($sth as $row ) 
+  { ?>
+
+   <option value="<?= $row["id_usuario"]; ?>"><?= $row["nombre"]; ?>  <?= $row["apellidos"]; ?></option>
+   
+<?php }
+
+}
+?>
+              </select>
+
+</div>
+
+</div>
+</div>
+<!-- ESPACIO PARA FILTROS -->
+
+<div class="datalist-wrapper">
+<!-- Loading overlay -->
+<div class="loading-overlay" style="display: none;"><div class="overlay-content">Cargando...</div></div>
+
+<!-- Data list container -->
+
+<!-- ESPACIO PARA TABLA ORIGINAL-->
+<?php
+$baseURL = 'GetUsuarios.php';
+$limit = 5;
+
+// Count of all records
+#$mar = "208";
+#$whereSQL = "WHERE users.id = establecimientos.id_usuario ";
+$query   = $db->query("SELECT  COUNT(*) as rowNum FROM solicitudes ");
+$result  = $query->fetch_assoc();
+$rowCount= $result['rowNum'];
+
+// Initialize pagination class
+$pagConfig = array(
+'baseURL' => $baseURL,
+'totalRows' => $rowCount,
+'perPage' => $limit,
+'contentDiv' => 'dataContainer',
+'link_func' => 'searchFilter'
+);
+$pagination =  new Pagination($pagConfig);
+
+// Fetch records based on the limit
+$query = $db->query("SELECT * FROM solicitudes ORDER BY id_solicitud ASC LIMIT $limit");
+
+
+if($query->num_rows > 0){?>
+<div class="table-responsive" id="dataContainer">
+<table class="table table-hover table-bordered">
+<thead>
+<tr>
+
+<th>Título</th>
+<th></th>
+<th>Móvil</th>
+<th>Tipo</th>
+<th>Editar</th>
+<th>Eliminar</th>
+
+</tr>
+</thead>
+<tbody>
+
+<?php
+while($row = $query->fetch_assoc()){
+?>
+<tr>
+<td><?= $row["nombre"]; ?> <?= $row["apellidos"]; ?></td>
+<td><?= $row["correo"]; ?></td>
+<td><?= $row["movil"]; ?></td>
+
+<td><?= $row["rol"]; ?></td>
+
+<td><button type="button" class="btn btn-info actualizar" data-id="<?= $row['id_usuario'];?>" data-nombre="<?= $row['nombre'];?>" data-apellidos="<?= $row['apellidos'];?>" data-dir="<?= $row['direccion'];?>" data-correo="<?= $row['correo'];?>" data-tel="<?= $row['telefono'];?>" data-movil="<?= $row['movil'];?>" data-usuario="<?= $row['usuario'];?>" data-pass="<?= $row['pass'];?>" data-rol="<?= $row['id_tipo'];?>" data-estado="<?= $row['id_estado_usuario'];?>" data-img="<?= $row['img'];?>">Editar</button></td>
+<td><button type="button" class="btn btn-danger delete"  data-id="<?= $row['id_usuario'];?>">Eliminar</button></td>
+</tr>
+<?php
+}
+
+} else{
+echo '<tr><td colspan="6"><h2>No hay registros</h2></td></tr>';
+}
+?>
+</tbody>
+</table>
+
+<!-- Display pagination links -->
+<?= $pagination->createLinks(); ?>
+</div>
+</div>
+<?php }
+?>
 
 </div> <!-- FINAL CARD BODY -->
                <!--  </div> -->
@@ -481,118 +604,98 @@ echo '<tr><td colspan="6"><h2>No hay registros</h2></td></tr>';
 <div class="col-md-4">
 <label>Nivel educativo</label>
 <select class="form-control form-control-sm" name="cmbnivel">
-    <option value="">Seleccione...</option>
-    <option value="Preparatoria">Preparatoria</option>
-    <option value="Universidad">Universidad</option>
-</select>
+                  <option value="">Seleccione...</option>
+                  <?php
+                  
+$sth = $con->prepare("SELECT * FROM niveles_educativos ");
+#$sth->bindParam(1, $asesor);
+$sth->execute();
+
+if ($sth->rowCount() > 0) {
+
+foreach ($sth as $row ) 
+  { ?>
+
+   <option value="<?= $row["id_nivel"]; ?>"><?= $row["nivel_educativo"]; ?></option>
+   
+<?php }
+
+}
+?>
+              </select>
 </div>
 
 <div class="col-md-4">
 <label>Tipo de trabajo</label>
-<select class="form-control form-control-sm" name="cmbnivel">
-    <option value="">Seleccione...</option>
-    <option value="Ensayo">Ensayo</option>
-    <option value="Investigación">Investigación</option>
-    <option value="Programación">Programación</option>
-    <option value="Diseño">Diseño</option>
-    <option value="Presentación">Presentación</option>
-    <option value="Análisis de datos">Análisis de datos</option>
-</select>
-</div>
-
-<div class="col-md-4">
-<label>Correo</label>
-<input type="text" class="form-control form-control-sm" name="correo" placeholder="Correo">
-</div>
-
-<div class="col-md-4">
-<label>Teléfono</label>
-
-<input type="text" class="form-control form-control-sm" name="tel" placeholder="Teléfono">
-
-</div>
-
-<div class="col-md-4">
-<label>Móvil</label>
-<input type="text" class="form-control form-control-sm" name="movil" placeholder="Móvil">
-</div>
-
-<div class="col-md-4">
-<label>Usuario</label>
-<input type="text" class="form-control form-control-sm" name="user" id="user" placeholder="Usuario">
-<h3 id="comprobar"></h3>
-
-</div>
-
-<div class="col-md-4">
-<label>Contraseña</label>
-<input class="form-control form-control-sm" type="password" name="pass" id="pass1">
-</div>
-
-<div class="col-md-4">
-
-<label for="cat">Confirmar contraseña:</label>
-
-<input class="form-control form-control-sm" type="password" id="pass2">
-
-<div id="respuesta" style="display: none;"><h3>Las contraseñas introducidas no son iguales</h3></div>
-</div>
-
-<div class="col-md-4">
-<label>Tipo de usuario</label>
-<select class="form-control form-control-sm" name="cmbrol">
-<option value="">Seleccione...</option>
-<?php 
-$sth = $con->prepare("SELECT * FROM roles ");
-#$sth->bindParam(1, $usuario);
+<select class="form-control form-control-sm" name="cmbtipo">
+                  <option value="">Seleccione...</option>
+                  <?php
+                  
+$sth = $con->prepare("SELECT * FROM tipos_trabajo ");
+#$sth->bindParam(1, $asesor);
 $sth->execute();
 
 if ($sth->rowCount() > 0) {
 
 foreach ($sth as $row ) 
-{ ?>
+  { ?>
 
-<option value="<?= $row["id_rol"]; ?>"><?= $row["rol"]; ?></option>
-
+   <option value="<?= $row["id_tipo_trabajo"]; ?>"><?= $row["tipo_trabajo"]; ?></option>
+   
 <?php }
 
 }
 ?>
-</select>
-
+              </select>
 </div>
 
 <div class="col-md-4">
-
-<label for="cat">Estado:</label>
-<select class="form-control form-control-sm" name="cmbestado">
-<option value="">Seleccione...</option>
-<?php 
-$sth = $con->prepare("SELECT * FROM estados ");
-#$sth->bindParam(1, $usuario);
+<label>Materia relacionada</label>
+<select class="form-control form-control-sm" name="cmbmateria">
+                  <option value="">Seleccione...</option>
+                  <?php
+                  
+$sth = $con->prepare("SELECT * FROM materias ");
+#$sth->bindParam(1, $asesor);
 $sth->execute();
 
 if ($sth->rowCount() > 0) {
 
 foreach ($sth as $row ) 
-{ ?>
+  { ?>
 
-<option value="<?= $row["id"]; ?>"><?= $row["estado"]; ?></option>
-
+   <option value="<?= $row["id_materia"]; ?>"><?= $row["materia"]; ?></option>
+   
 <?php }
 
 }
 ?>
-</select>
+              </select>
+</div>
+
+<div class="col-md-4">
+<label>Fecha límite</label>
+
+<input type="text" class="form-control form-control-sm" name="fecha" id="fecha" placeholder="Teléfono">
 
 </div>
 
 <div class="col-md-4">
+<label>Descripción</label>
+<textarea class="form-control form-control-sm" name="descripcion" cols="8">
+  Descripción
+</textarea>
+</div>
 
-<label for="cat">Foto de perfil:</label>
-
-<input class="form-control form-control-sm" type="file" name="archivo">
-<br>
+<div class="col-md-4">
+<label>Documentos</label>
+<div class="field_wrapper">
+       <div>
+        
+        <input  type="file" class="form-control form-sm" name="archivo[]">
+        <a href="javascript:void(0);" class="agregar_documento" title="Add field">  <img src="dist/img/iconos/add-icon.png"/></a>
+          </div>
+         </div>
 </div>
 
 </div> <!--FINAL ROW-->
@@ -801,6 +904,72 @@ foreach ($sth as $row )
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard3.js"></script>
 <script src="dist/js/sweetalert2@10.js"></script>
+<script src="jquery-ui/jquery-ui.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+y = 1;
+var maxField = 20; //Input fields increment limitation
+var addButton = $('.agregar_documento'); //Add button selector
+var wrapper = $('.field_wrapper'); //Input field wrapper
+var fieldHTML = '<div><input type="file" id="archivo'+y+'" name="archivo[]" /><a href="javascript:void(0);" class="remove_button"><img src="dist/img/iconos/remove-icon.png"/></a></div>'; //New input field html 
+//Initial field counter is 1
+
+//Once add button is clicked
+$(addButton).click(function(){
+//Check maximum number of input fields
+if(y < maxField){ 
+y++; //Increment field counter
+$(wrapper).append('<div><input type="file" id="archivo'+y+'" name="archivo[]" /><a href="javascript:void(0);" class="remove_button"><img src="dist/img/iconos/remove-icon.png"/></a></div>'); //Add field html
+}
+});
+
+//Once remove button is clicked
+$(wrapper).on('click', '.remove_button', function(e){
+var id = $(this).attr("data-id");
+e.preventDefault();
+$(this).parent('div').remove(); //Remove field html
+id--;//Decrement field counter
+});
+});
+</script>
+<script type="text/javascript">
+  jQuery(function($){
+
+    var hoy=new Date();
+  $.datepicker.regional['es'] = {
+    minDate: hoy,
+    changeMonth: true,
+changeYear: true,
+    closeText: 'Cerrar',
+    prevText: '&#x3c;Ant',
+    nextText: 'Sig&#x3e;',
+    currentText: 'Hoy',
+    monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+    monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun',
+    'Jul','Ago','Sep','Oct','Nov','Dic'],
+    dayNames: ['Domingo','Lunes','Martes','Mi&eacute;rcoles','Jueves','Viernes','S&aacute;bado'],
+    dayNamesShort: ['Dom','Lun','Mar','Mi&eacute;','Juv','Vie','S&aacute;b'],
+    dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','S&aacute;'],
+    weekHeader: 'Sm',
+    Format: 'yy/mm/dd',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix: ''};
+  $.datepicker.setDefaults($.datepicker.regional['es']);
+    $("#fecha").datepicker({
+          
+          dateFormat: 'yy/mm/dd'
+        });
+});    
+ 
+   $(document).ready(function() {
+           
+
+           //$("#datepicker2").datepicker({ appendText: ' Haga click para introducir una fecha' });
+        });
+</script>
 <script>
 // Custom function to handle search and filter operations
 function searchFilter(page_num) {

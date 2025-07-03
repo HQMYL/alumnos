@@ -32,6 +32,46 @@ if ($rol == "1")
           </li>
 
           <li class="nav-item">
+            <a href="tipos-trabajo.php" class="nav-link">
+              <i class="nav-icon fas fa-book"></i>
+              <p>
+                Tipos de trabajo
+                
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="listado-materias.php" class="nav-link">
+              <i class="nav-icon fas fa-book"></i>
+              <p>
+                Materias
+                
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="niveles-educativos.php" class="nav-link">
+              <i class="nav-icon fas fa-book"></i>
+              <p>
+                Niveles educativos
+                
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="niveles-educativos.php" class="nav-link">
+              <i class="nav-icon fas fa-book"></i>
+              <p>
+                
+                
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a href="administrar-logotipo.php" class="nav-link">
               <i class="nav-icon fas fa-book"></i>
               <p>

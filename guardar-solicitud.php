@@ -1,15 +1,16 @@
 <?php
 session_start();
-
+$uploadDir = 'dist/img/documentos/';
+$allowTypes = array('pdf','xlsx','pptx','docx','txt','zip','rar');
 
 include("conexion.php");
 include("dbconfig2.php");
 
 $fallo = "Huboun error inténtalo nuevamente";
-  $fallo2 = "El tamaño de la foto debe ser máximo de 5MG";
-  $fallo3 = "Solo se permiten imágenes JPG,JPEG,PNG,JFIF";
+  $fallo2 = "El tamaño del archivo debe ser máximo de 5MG";
+  $fallo3 = "Solo se permiten archivos PDF,DOCX,XLSX,PPTX,ZIP,RAR,TXT";
   
- $exito = "El curso ha sido registrado exitosamente";
+ $exito = "La solicitud ha sido registrada exitosamente";
  
 $response = "";
 $response = array(
@@ -21,10 +22,34 @@ $codigo = "";
 $codigo = mt_rand(1000,1000000);
 
 
-$nombre = "";
-if(isset($_POST['nombre'])) 
+$titulo = "";
+if(isset($_POST['titulo'])) 
 {
-    $nombre = $_POST["nombre"];
+    $titulo = $_POST["titulo"];
+}
+
+$nivel_educativo = "";
+if(isset($_POST['cmbnivel'])) 
+{
+    $nivel_educativo = $_POST["cmbnivel"];
+}
+
+$tipo_trabajo = "";
+if(isset($_POST['cmbtipo'])) 
+{
+    $tipo_trabajo = $_POST["cmbtipo"];
+}
+
+$materia = "";
+if(isset($_POST['cmbmateria'])) 
+{
+    $materia = $_POST["cmbmateria"];
+}
+
+$fecha_limite = "";
+if(isset($_POST['fecha'])) 
+{
+    $fecha_limite = $_POST["fecha"];
 }
 
 $descripcion = "";
@@ -33,75 +58,50 @@ if(isset($_POST['descripcion']))
     $descripcion = $_POST["descripcion"];
 }
 
-
-$duracion = "";
-if(isset($_POST['duracion'])) 
+$id_estudiante = "";
+if(isset($_POST['id_estudiante'])) 
 {
-    $duracion = $_POST["duracion"];
+    $id_estudiante = $_POST["id_estudiante"];
 }
 
-$profesor_asignado = "";
-if(isset($_POST['cmbusuario'])) 
-{
-    $profesor_asignado = $_POST["cmbusuario"];
-}
+$filesArr = $_FILES["archivo"];
 
-#if(isset($_POST['btnsave']))
- # {
-    
-    
-    /*else if(empty($imgFile)){
-      $errMSG = "Please Select Image File.";
-    }*/
-    #else
-    #{
-    /* $imgFile = $_FILES['archivo']['name'];
-    $tmp_dir = $_FILES['archivo']['tmp_name'];
-    $imgSize = $_FILES['archivo']['size'];
-    $carpeta = 'dist/img/cursos/';
-     if (!file_exists($carpeta)) 
-     {
-       mkdir($carpeta,0777);
-     }
-      $upload_dir = $carpeta; // upload directory
-  
-      $imgExt = strtolower(pathinfo($imgFile,PATHINFO_EXTENSION)); // get image extension
-    
-      // valid image extensions
-      $valid_extensions = array('jpeg', 'jpg', 'png', 'gif','jfif'); // valid extensions
-    
-      // rename uploading image
-      $userpic = mt_rand(1000,1000000).".".$imgExt;
+ $fileNames = array_filter($filesArr['name']);
         
-      // allow valid image file formats
-      if(in_array($imgExt, $valid_extensions))
-      {     
-        // Check file size '5MB'
-        if($imgSize < 5000000)
-        {
-          move_uploaded_file($tmp_dir,$upload_dir.$userpic);
-        }
-        else
-        {
-            $response['status'] = 0;
-            $response['message'] = $fallo2;
-            echo  json_encode($response);
-        }
-      }
-      else
-      {
-        $errMSG = "Solo se permiten  archivos JPG,JPEG,PNG,GIF,JFIF";    
-      }
-    #}
-    
-    if (empty($imgFile)) 
-    {
-      $userpic = "user-default.png";
-    } */
-    
-    /* if(!isset($errMSG))
-    { */
-      $stmt = $DB_con->prepare('INSERT INTO cursos(nombre_curso,descripcion_curso,duracion,profesor_asignado) VALUES(:nombre,:descripcion,:duracion,:profesor_asignado)');
+       
+        $uploadedFile = '';
+        if(!empty($fileNames)){ //SUBIDA DE ARCHIVOS
+          $uploadStatus = 1;
+            foreach($filesArr['name'] as $key=>$val){ 
+                // File upload path 
+                $fileName = basename($filesArr['name'][$key]);
+                $imgExt = strtolower(pathinfo($fileName,PATHINFO_EXTENSION));
+                 
+                 $fileName = mt_rand(1000,1000000).".".$imgExt; 
+                $targetFilePath = $uploadDir . $fileName; 
+                 
+                // Check whether file type is valid 
+                $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION); 
+                if(in_array($fileType, $allowTypes)){ 
+                    // Upload file to server 
+                    if(move_uploaded_file($filesArr["tmp_name"][$key], $targetFilePath)){ 
+                        $uploadedFile .= $fileName.',';
+                    }else{ 
+                        $uploadStatus = 0;
+                        $response['message'] = 'Lo Sentimos hubo un error al subir tu Archivo.';
+                    } 
+                }else{ 
+                    $uploadStatus = 0;
+                    $response['message'] = "Solo se permiten archivos JPG,JPEG,GIF,PNG y JFIF";
+                } 
+            } 
+        } //SUBIDA DE FOTOS DE USUARIOS
+
+       $uploadedFileStr = trim($uploadedFile, ',');
+if($uploadStatus == 1)
+{ #SI LA SUBIDA FUE EXITOSA
+
+  $stmt = $DB_con->prepare('INSERT INTO solicitudes(titulo,nivel_educativo,tipo_trabajo,materia_relacionada,fecha_limite,descripcion,id_estudiante,archivos) VALUES(:titulo,:nivel_educativo,:tipo_trabajo,:materia,:fecha_limite,:descripcion)');
       $stmt->bindParam(':nombre',$nombre);
       $stmt->bindParam(':descripcion',$descripcion);
       $stmt->bindParam(':duracion',$duracion);
@@ -111,11 +111,7 @@ if(isset($_POST['cmbusuario']))
         $response['status'] = 1;
     $response['message'] = $exito;
     echo  json_encode($response);
-        #$successMSG = "new record succesfully inserted ...";
-        #header("refresh:5;index.php"); // redirects image view page after 5 seconds.
-
        
-     
     
       }
       else
@@ -124,14 +120,10 @@ if(isset($_POST['cmbusuario']))
     $response['message'] = $fallo;
     echo  json_encode($response);
       }
-    /* } */
-  #}
 
 
+} #SI LA SUBIDA FUE EXITOSA
 
 
-
-
-
-
-?>
+      
+    ?>
