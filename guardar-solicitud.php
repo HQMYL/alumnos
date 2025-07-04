@@ -101,11 +101,15 @@ $filesArr = $_FILES["archivo"];
 if($uploadStatus == 1)
 { #SI LA SUBIDA FUE EXITOSA
 
-  $stmt = $DB_con->prepare('INSERT INTO solicitudes(titulo,nivel_educativo,tipo_trabajo,materia_relacionada,fecha_limite,descripcion,id_estudiante,archivos) VALUES(:titulo,:nivel_educativo,:tipo_trabajo,:materia,:fecha_limite,:descripcion)');
-      $stmt->bindParam(':nombre',$nombre);
+  $stmt = $DB_con->prepare('INSERT INTO solicitudes(titulo,nivel_educativo,tipo_trabajo_id,materia_relacionada,fecha_limite,descripcion,id_estudiante,archivos) VALUES(:titulo,:nivel_educativo,:tipo_trabajo,:materia,:fecha_limite,:descripcion,:id_estudiante,:uploadedFileStr)');
+      $stmt->bindParam(':titulo',$titulo);
+      $stmt->bindParam(':nivel_educativo',$nivel_educativo);
+      $stmt->bindParam(':tipo_trabajo',$tipo_trabajo);
+      $stmt->bindParam(':materia',$materia);
+      $stmt->bindParam(':fecha_limite',$fecha_limite);
       $stmt->bindParam(':descripcion',$descripcion);
-      $stmt->bindParam(':duracion',$duracion);
-      $stmt->bindParam(':profesor_asignado',$profesor_asignado);
+      $stmt->bindParam(':id_estudiante',$id_estudiante);
+      $stmt->bindParam(':uploadedFileStr',$uploadedFileStr);
       if($stmt->execute())
       {
         $response['status'] = 1;

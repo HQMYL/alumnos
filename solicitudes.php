@@ -1,8 +1,8 @@
 <?php
 session_start(); 
-include("conexion.php");
+include("config/conexion.php");
 include("Pagination.class.php");    
-include("dbConfig.php");
+include("config/dbConfig.php");
 $usuario = "";
 
 if (isset($_SESSION["usuario"])) 
@@ -480,12 +480,12 @@ foreach ($sth as $row )
 
 <!-- ESPACIO PARA TABLA ORIGINAL-->
 <?php
-$baseURL = 'GetUsuarios.php';
+$baseURL = 'GetSolicitudesEstudiante.php';
 $limit = 5;
 
 // Count of all records
 #$mar = "208";
-#$whereSQL = "WHERE users.id = establecimientos.id_usuario ";
+$whereSQL = "WHERE  = establecimientos.id_usuario ";
 $query   = $db->query("SELECT  COUNT(*) as rowNum FROM solicitudes ");
 $result  = $query->fetch_assoc();
 $rowCount= $result['rowNum'];
@@ -501,7 +501,7 @@ $pagConfig = array(
 $pagination =  new Pagination($pagConfig);
 
 // Fetch records based on the limit
-$query = $db->query("SELECT * FROM solicitudes ORDER BY id_solicitud ASC LIMIT $limit");
+$query = $db->query("SELECT * FROM solicitudes a LEFT JOIN niveles_educativos b ON a.id_estudiante = b.id_nivel LEFT JOIN tipos_trabajo c ON a.tipo_trabajo_id = c.id_tipo_trabajo LEFT JOIN materias d ON a.materia_relacionada = d.id_materia LEFT JOIN users e ON a.id_estudiante = e.id_usuario  ORDER BY a.id_solicitud ASC LIMIT $limit");
 
 
 if($query->num_rows > 0){?>
@@ -511,9 +511,9 @@ if($query->num_rows > 0){?>
 <tr>
 
 <th>Título</th>
-<th></th>
-<th>Móvil</th>
-<th>Tipo</th>
+<th>Tipo trabajo</th>
+<th>Materia relacionada</th>
+<th>Fecha límite</th>
 <th>Editar</th>
 <th>Eliminar</th>
 
@@ -525,13 +525,11 @@ if($query->num_rows > 0){?>
 while($row = $query->fetch_assoc()){
 ?>
 <tr>
-<td><?= $row["nombre"]; ?> <?= $row["apellidos"]; ?></td>
-<td><?= $row["correo"]; ?></td>
-<td><?= $row["movil"]; ?></td>
-
-<td><?= $row["rol"]; ?></td>
-
-<td><button type="button" class="btn btn-info actualizar" data-id="<?= $row['id_usuario'];?>" data-nombre="<?= $row['nombre'];?>" data-apellidos="<?= $row['apellidos'];?>" data-dir="<?= $row['direccion'];?>" data-correo="<?= $row['correo'];?>" data-tel="<?= $row['telefono'];?>" data-movil="<?= $row['movil'];?>" data-usuario="<?= $row['usuario'];?>" data-pass="<?= $row['pass'];?>" data-rol="<?= $row['id_tipo'];?>" data-estado="<?= $row['id_estado_usuario'];?>" data-img="<?= $row['img'];?>">Editar</button></td>
+  <td><?= $row["titulo"]; ?></td>
+<td><?= $row["tipo_trabajo"]; ?></td>
+<td><?= $row["materia"]; ?></td>
+<td><?= $row["fecha_limite"]; ?></td>
+<td><button type="button" class="btn btn-info actualizar" data-id="<?= $row['id_solicitud'];?>" data-titulo="<?= $row['titulo'];?>" data-nivel="<?= $row['nivel_educativo'];?>" data-tipo_trabajo="<?= $row['tipo_trabajo_id'];?>" data-materia="<?= $row['materia_relacionada'];?>" data-fecha="<?= $row['fecha_limite'];?>" data-descripcion="<?= $row['descripcion'];?>" data-id_asesor="<?= $row['id_asesor'];?>" data-id_estudiante="<?= $row['id_estudiante'];?>" data-archivos="<?= $row['archivos'];?>">Editar</button></td>
 <td><button type="button" class="btn btn-danger delete"  data-id="<?= $row['id_usuario'];?>">Eliminar</button></td>
 </tr>
 <?php
@@ -685,6 +683,7 @@ foreach ($sth as $row )
 <textarea class="form-control form-control-sm" name="descripcion" cols="8">
   Descripción
 </textarea>
+<input type="hidden" class="form-control form-control-sm" name="id_estudiante" id="id_estudiante" value="<?= $usuario_id; ?>">
 </div>
 
 <div class="col-md-4">
@@ -696,7 +695,7 @@ foreach ($sth as $row )
         <a href="javascript:void(0);" class="agregar_documento" title="Add field">  <img src="dist/img/iconos/add-icon.png"/></a>
           </div>
          </div>
-         <input type="text" class="form-control form-control-sm" name="id_estudiante" id="id_estudiante" value="<?= $usuario_id; ?>">
+         
 </div>
 
 </div> <!--FINAL ROW-->
@@ -736,127 +735,123 @@ foreach ($sth as $row )
 <!-- Modal content-->
 <div class="modal-content">
 <div class="modal-header" style="background-color: #337AFF;">
-<p class="modal-title" style="color: #fff;">Actualizar usuario</p>
+<p class="modal-title" style="color: #fff;">Actualizar solicitud</p>
 <button type="button" class="close" data-dismiss="modal">&times;</button>
 </div>
 <div class="modal-body">
-<form id="fupForm2">
+<form id="fupForm">
 <div class="row">
 <div class="col-md-4">
-<label>Nombre</label>
-<input type="text" class="form-control form-control-sm" name="nombre" id="nombre" placeholder="Nombre">
+<label>Título</label>
+<input type="text" class="form-control form-control-sm" name="titulo" id="titulo">
 </div>
 
 <div class="col-md-4">
-<label>Apellidos</label>
-<input type="text" class="form-control form-control-sm" name="apellidos" id="apellidos" placeholder="Apellidos">
-</div>
-
-<div class="col-md-4">
-<label>Dirección</label>
-<input type="text" class="form-control form-control-sm" name="dir" id="dir" placeholder="Dirección">
-</div>
-
-<div class="col-md-4">
-<label>Correo</label>
-<input type="text" class="form-control form-control-sm" name="correo" id="correo" placeholder="Correo">
-</div>
-
-<div class="col-md-4">
-<label>Teléfono</label>
-
-<input type="text" class="form-control form-control-sm" name="tel" id="tel" placeholder="Teléfono">
-
-</div>
-
-<div class="col-md-4">
-<label>Móvil</label>
-<input type="text" class="form-control form-control-sm" name="movil" id="movil" placeholder="Móvil">
-</div>
-
-<div class="col-md-4">
-<label>Usuario</label>
-<input type="text" class="form-control form-control-sm" name="user" id="user2" placeholder="Usuario">
-<h3 id="comprobar"></h3>
-
-</div>
-
-<div class="col-md-4">
-<label>Contraseña</label>
-<input class="form-control form-control-sm" type="hidden" name="pass" id="pass0">
-<input class="form-control form-control-sm" type="password" name="pass11" id="pass11">
-</div>
-
-<div class="col-md-4">
-
-<label for="cat">Confirmar contraseña:</label>
-
-<input class="form-control form-control-sm" type="password" id="pass12">
-
-<div id="respuesta2" style="display: none;"><h3>Las contraseñas introducidas no son iguales</h3></div>
-</div>
-
-<div class="col-md-4">
-<label>Tipo de usuario</label>
-<select class="form-control form-control-sm" name="cmbrol" id="cmbrol">
-<option value="">Seleccione...</option>
-<?php 
-$sth = $con->prepare("SELECT * FROM roles ");
-#$sth->bindParam(1, $usuario);
+<label>Nivel educativo</label>
+<select class="form-control form-control-sm" name="cmbnivel" id="cmbnivel">
+                  <option value="">Seleccione...</option>
+                  <?php
+                  
+$sth = $con->prepare("SELECT * FROM niveles_educativos ");
+#$sth->bindParam(1, $asesor);
 $sth->execute();
 
 if ($sth->rowCount() > 0) {
 
 foreach ($sth as $row ) 
-{ ?>
+  { ?>
 
-<option value="<?= $row["id_rol"]; ?>"><?= $row["rol"]; ?></option>
-
+   <option value="<?= $row["id_nivel"]; ?>"><?= $row["nivel_educativo"]; ?></option>
+   
 <?php }
 
 }
 ?>
-</select>
-
+              </select>
 </div>
 
 <div class="col-md-4">
-
-<label for="cat">Estado:</label>
-<select class="form-control form-control-sm" name="cmbestado" id="cmbestado">
-<option value="">Seleccione...</option>
-<?php 
-$sth = $con->prepare("SELECT * FROM estados ");
-#$sth->bindParam(1, $usuario);
+<label>Tipo de trabajo</label>
+<select class="form-control form-control-sm" name="cmbtipo" id="cmbtipo">
+                  <option value="">Seleccione...</option>
+                  <?php
+                  
+$sth = $con->prepare("SELECT * FROM tipos_trabajo ");
+#$sth->bindParam(1, $asesor);
 $sth->execute();
 
 if ($sth->rowCount() > 0) {
 
 foreach ($sth as $row ) 
-{ ?>
+  { ?>
 
-<option value="<?= $row["id"]; ?>"><?= $row["estado"]; ?></option>
-
+   <option value="<?= $row["id_tipo_trabajo"]; ?>"><?= $row["tipo_trabajo"]; ?></option>
+   
 <?php }
 
 }
 ?>
-</select>
+              </select>
+</div>
+
+<div class="col-md-4">
+<label>Materia relacionada</label>
+<select class="form-control form-control-sm" name="cmbmateria">
+                  <option value="">Seleccione...</option>
+                  <?php
+                  
+$sth = $con->prepare("SELECT * FROM materias ");
+#$sth->bindParam(1, $asesor);
+$sth->execute();
+
+if ($sth->rowCount() > 0) {
+
+foreach ($sth as $row ) 
+  { ?>
+
+   <option value="<?= $row["id_materia"]; ?>"><?= $row["materia"]; ?></option>
+   
+<?php }
+
+}
+?>
+              </select>
+</div>
+
+<div class="col-md-4">
+<label>Fecha límite</label>
+
+<input type="text" class="form-control form-control-sm" name="fecha" id="fecha" placeholder="Teléfono">
 
 </div>
-<div class="col-md-4">
 
-<label for="cat">Foto de perfil actual:</label>
-<img src="" id="img" width="150"; height="150";>
+<div class="col-md-4">
+<label>Descripción</label>
+<textarea class="form-control form-control-sm" name="descripcion" id="descripcion" cols="8">
+  Descripción
+</textarea>
+<input type="hidden" class="form-control form-control-sm" name="id_estudiante" value="<?= $usuario_id; ?>">
 </div>
-<div class="col-md-4">
 
-<label for="cat">Foto de perfil:</label>
-
-<input class="form-control form-control-sm" type="file" name="archivo">
-<img src="" name="imagen_actual" id="imagen_actual">
-<input class="form-control form-control-sm" type="hidden" name="id" id="id_usuario">
-<br>
+<div class="col-md-12">
+<label>Documentos</label>
+<div class="table-responsive">
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Tipo de trabajo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+         
 </div>
 
 </div> <!--FINAL ROW-->
@@ -864,7 +859,7 @@ foreach ($sth as $row )
 
 <!-- /.col -->
 <div class="col-4">
-<input type="submit" name="submit" class="btn btn-primary btn-rounded submitBtn2" value="Actualizar"/>
+<input type="submit" name="submit" class="btn btn-primary btn-rounded submitBtn2" value="Guardar"/>
 <!--<button type="submit" class="btn btn-secondary">Guardar</button>-->
 
 
@@ -1098,7 +1093,7 @@ $("input").keydown(function (e){
     e.preventDefault();
     $.ajax({
       type: 'POST',
-      url: 'guardar-usuario.php',
+      url: 'guardar-solicitud.php',
       data: new FormData(this),
       dataType: 'json',
       contentType: false,
@@ -1129,7 +1124,7 @@ $("#fupForm2").submit(function(e){
     e.preventDefault();
     $.ajax({
       type: 'POST',
-      url: 'update-usuario.php',
+      url: 'update-solicitud.php',
       data: new FormData(this),
       dataType: 'json',
       contentType: false,
@@ -1166,35 +1161,33 @@ $(".actualizar").on("click",function()
  {
 
   var id = $(this).attr("data-id");
-  var codigo = $(this).attr("data-codigo");
-  var nombre = $(this).attr("data-nombre");
-  var apellidos = $(this).attr("data-apellidos");
-  var dir = $(this).attr("data-dir");
-  var correo = $(this).attr("data-correo");
-  var tel = $(this).attr("data-tel");
-  var movil = $(this).attr("data-movil");
-  var usuario = $(this).attr("data-usuario");
-  var pass = $(this).attr("data-pass");
-  var rol = $(this).attr("data-rol");
-   var estado = $(this).attr("data-estado");
-   var img = $(this).attr("data-img");
-   
+  var titulo = $(this).attr("data-titulo");
+  var nivel_educativo = $(this).attr("data-nivel_educativo");
+  var tipo_trabajo_id = $(this).attr("data-tipo_trabajo_id");
+  var materia = $(this).attr("data-materia");
+  var fecha_limite = $(this).attr("data-fecha");
+  var descripcion = $(this).attr("data-descripcion");
+  var id_asesor = $(this).attr("data-id_asesor");
+  var id_estudiante = $(this).attr("data-id_estudiante");
+  var archivos = $(this).attr("data-archivos");
+   archivos = archivos.split(',');
+   console.log(archivos);
+   for (let i = 0; i < archivos.length; i++)
+   {
+    console.log(archivos[i]); 
+   }
   //numeros_contacto = numeros_contacto.split(',');
   
   
-  $("#id_usuario").val(id);
-  $("#nombre").val(nombre);
-  $("#apellidos").val(apellidos);
-  $("#dir").val(dir);
-  $("#correo").val(correo);
-  $("#tel").val(tel);
-  $("#movil").val(movil);
-  $("#user2").val(usuario);
-  $("#pass0").val(pass);
-  $('#cmbrol option[value="'+rol+'"]').attr("selected", true);
-  $('#cmbestado option[value="'+estado+'"]').attr("selected", true);
-  $("#img").attr("src","dist/img/users/"+img);
-  $("#imagen_actual").val(img);
+  $("#id_solicitud").val(id);
+  $("#titulo").val(titulo);
+  $('#cmbnivel option[value="'+nivel_educativo+'"]').attr("selected", true);
+  $('#cmbtipo option[value="'+tipo_trabajo_id+'"]').attr("selected", true);
+  $('#cmbmateria option[value="'+materia+'"]').attr("selected", true);
+  $("#fecha_limite").val(fecha);
+  $("#descripcion").val(descripcion);
+  $('#cmbasesor option[value="'+id_asesor+'"]').attr("selected", true);
+  $("#id_estudiante").val(id_estudiante);
   
 
   $("#myModalActualizar").modal({show:true});
